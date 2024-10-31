@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+spring:
+
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/chatapp'
+    username: postgres
+    password: damminhhai
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
