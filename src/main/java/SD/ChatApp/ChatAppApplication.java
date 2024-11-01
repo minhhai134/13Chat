@@ -16,7 +16,7 @@ public class ChatAppApplication {
 		UserRepository userRepository = context.getBean(UserRepository.class);
 
 
-		for (int i=1;i<=3;i++) {
+		for (int i=1;i<=4;i++) {
 			userRepository.save(User.builder().
 					username("username"+Integer.toString(i)).
 					password("1").

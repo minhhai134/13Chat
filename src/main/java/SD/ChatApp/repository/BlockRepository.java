@@ -9,9 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BlockRepository extends JpaRepository<Block, String> {
 
-
-    Optional<Block> findByBlockUserIdAndDestinationUserId(String blockerUserId, String destinationUserId);
-
-
-
+    Optional<Block> findByBlockerUserIdAndDestinationUserId(String blockerUserId, String destinationUserId);
 }

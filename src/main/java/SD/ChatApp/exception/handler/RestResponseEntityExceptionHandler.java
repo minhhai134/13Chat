@@ -1,7 +1,11 @@
 package SD.ChatApp.exception.handler;
 
-import SD.ChatApp.exception.UserNameExistedException;
-import SD.ChatApp.exception.UserNotFoundException;
+import SD.ChatApp.exception.friend.FriendRelationshipExistedException;
+import SD.ChatApp.exception.friend.FriendRelationshipNotFound;
+import SD.ChatApp.exception.friend.FriendRequestExistedException;
+import SD.ChatApp.exception.request.InvalidRequestException;
+import SD.ChatApp.exception.user.UserNameExistedException;
+import SD.ChatApp.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,13 +21,21 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     private static final Map<Class<? extends RuntimeException>, HttpStatus> EXCEPTION_TO_HTTP_STATUS_CODE = Map.of(
             UserNotFoundException.class, HttpStatus.NOT_FOUND,
-            UserNameExistedException.class, HttpStatus.CONFLICT
+            UserNameExistedException.class, HttpStatus.CONFLICT,
+            FriendRelationshipExistedException.class, HttpStatus.CONFLICT,
+            FriendRequestExistedException.class, HttpStatus.CONFLICT,
+            InvalidRequestException.class, HttpStatus.BAD_REQUEST,
+            FriendRelationshipNotFound.class, HttpStatus.CONFLICT
     );
 
 
     private static final Map<Class<? extends RuntimeException>, String> EXCEPTION_TO_ERROR_CODE = Map.of(
             UserNotFoundException.class, "USER_NOT_FOUND",
-            UserNameExistedException.class, "USER_NAME_EXISTED"
+            UserNameExistedException.class, "USER_NAME_EXISTED",
+            FriendRelationshipExistedException.class, "FRIEND_RELATIONSHIP_EXISTED",
+            FriendRequestExistedException.class, "FRIEND_REQUEST_EXISTED",
+            InvalidRequestException.class, "INVALID_REQUEST_BODY",
+            FriendRelationshipNotFound.class, "FRIEND_RELATIONSHIP_NOT_FOUND"
     );
 
     @ExceptionHandler()

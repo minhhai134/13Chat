@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "friendrequest")
+@Table(name = "block")
 @Data
 @Builder
 @NoArgsConstructor

@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "friendrelation")
+@Table(name = "friend_relation")
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class FriendRelation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String user1Id;
+    private String userId;
 
-    private String user2Id;
+    private String friendId;
 }
