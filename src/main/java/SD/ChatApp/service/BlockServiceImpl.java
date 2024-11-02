@@ -3,10 +3,12 @@ package SD.ChatApp.service;
 import SD.ChatApp.dto.block.BlockRequest;
 import SD.ChatApp.model.Block;
 import SD.ChatApp.repository.BlockRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class BlockServiceImpl implements BlockService {
 
     @Autowired
@@ -24,6 +26,7 @@ public class BlockServiceImpl implements BlockService {
     }
 
     public void unBlock(String blockId) {
+        log.info("BlockId: {}",blockId );
         blockRepository.deleteById(blockId);
     }
 }

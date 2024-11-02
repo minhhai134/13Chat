@@ -4,8 +4,10 @@ import SD.ChatApp.exception.friend.FriendRelationshipExistedException;
 import SD.ChatApp.exception.friend.FriendRelationshipNotFound;
 import SD.ChatApp.exception.friend.FriendRequestExistedException;
 import SD.ChatApp.exception.request.InvalidRequestException;
+import SD.ChatApp.exception.user.NameExistedException;
 import SD.ChatApp.exception.user.UserNameExistedException;
 import SD.ChatApp.exception.user.UserNotFoundException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +27,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             FriendRelationshipExistedException.class, HttpStatus.CONFLICT,
             FriendRequestExistedException.class, HttpStatus.CONFLICT,
             InvalidRequestException.class, HttpStatus.BAD_REQUEST,
-            FriendRelationshipNotFound.class, HttpStatus.CONFLICT
+            FriendRelationshipNotFound.class, HttpStatus.CONFLICT,
+            NameExistedException.class, HttpStatus.CONFLICT,
+            DataAccessException.class, HttpStatus.INTERNAL_SERVER_ERROR
     );
 
 
@@ -35,7 +39,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             FriendRelationshipExistedException.class, "FRIEND_RELATIONSHIP_EXISTED",
             FriendRequestExistedException.class, "FRIEND_REQUEST_EXISTED",
             InvalidRequestException.class, "INVALID_REQUEST_BODY",
-            FriendRelationshipNotFound.class, "FRIEND_RELATIONSHIP_NOT_FOUND"
+            FriendRelationshipNotFound.class, "FRIEND_RELATIONSHIP_NOT_FOUND",
+            NameExistedException.class, "NAME_EXISTED",
+            DataAccessException.class, "DATABASE_CONFLICT"
     );
 
     @ExceptionHandler()

@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 public interface FriendService {
 
+    public boolean checkFriendRelationship(String id1, String id2);
+
+
     FriendRequest sendFriendRequest(FriendRequestRequest request);
 
     void responseFriendRequest(ResponseAddFriendRequest request);
@@ -25,4 +28,6 @@ public interface FriendService {
     void unblock(UnblockRequest request);
 
     void unfriend(UnfriendRequest request);
+
+
 }

@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
@@ -37,11 +39,35 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().user(user).build());
     }
 
-    @GetMapping("{username}")
-    public ResponseEntity<GetUserInfoResponse> getUserInfo(@Valid @RequestBody GetUserInfoRequest request){
+    //****************************************************************************************
 
-        return ResponseEntity.status(HttpStatus.OK).body(GetUserInfoResponse.builder().build());
+    @GetMapping("/info/{searchName}")
+    public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestHeader("id") String userId,@PathVariable String searchName){
+        GetUserInfoResponse response = userService.getUserInfo(userId,searchName);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/friend-request-list")
+    public ResponseEntity<List<GetFriendRequestListResponse>> getFriendRequestList(@RequestHeader("id") String userId){
+        List<GetFriendRequestListResponse> response = userService.getFriendRequestList(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/friend-list")
+    public ResponseEntity<List<GetFriendListResponse>> getFriendList(@RequestHeader("id") String userId){
+        List<GetFriendListResponse> response = userService.getFriendList(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/block-list")
+    public ResponseEntity<List<GetBlockListResponse>> getBlockList(@RequestHeader("id") String userId){
+        List<GetBlockListResponse> response = userService.getBlockList(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+
+    //****************************************************************************************
 
     @PostMapping("/friend-request")
     public ResponseEntity<FriendRequestResponse> sendFriendRequest(@Valid @RequestBody FriendRequestRequest request){
@@ -50,7 +76,7 @@ public class UserController {
     }
 
     @PatchMapping("/friend-request")
-    public ResponseEntity<ResponseAddFriendResponse> responseFriendReuqest(@Valid @RequestBody ResponseAddFriendRequest request){
+    public ResponseEntity<ResponseAddFriendResponse> responseFriendRequest(@Valid @RequestBody ResponseAddFriendRequest request){
         friendService.responseFriendRequest(request);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseAddFriendResponse.builder().status("ok").build());
     }
