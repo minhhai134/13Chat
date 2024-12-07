@@ -14,8 +14,10 @@ import org.hibernate.tool.schema.spi.SchemaManagementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +52,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public User login(LoginRequest request) {
-        return userRepository.findByUsernameAndPassword(request.getUsername(), request.getPassword())
-                .orElseThrow(() -> new UserNotFoundException());
+        log.info("abc");
+        User user = userRepository.findByUsernameAndPassword(request.getUsername(), request.getPassword())
+                    .orElseThrow(UserNotFoundException::new);
+        log.info("User login: {}", user);
+        return user;
     }
 
     public GetUserInfoResponse getUserInfo(String userId, String searchName){
@@ -59,7 +64,7 @@ public class UserServiceImpl implements UserService {
         StringBuilder relationship = new StringBuilder("non-relationship");
 
         User foundUser = userRepository.findByName(searchName)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(UserNotFoundException::new);
 
         if(blockService.checkBlockstatus(userId, foundUser.getId()) || blockService.checkBlockstatus(foundUser.getId(), userId))
             throw new UserNotFoundException();
@@ -90,9 +95,9 @@ public class UserServiceImpl implements UserService {
         try {
             log.info("UserID: {}", userId);
             response = userRepository.getFriendRequestList(userId);
-//            log.info("FriendRequest List: {}", response);
+            log.info("FriendRequest List: {}", response);
             return response;
-        } catch (NestedRuntimeException | HibernateException e ) {
+        } catch (Exception e ) {
             // Handle JPA data access exception
             System.err.println("Error: " + e.getMessage());
             // You can also log the exception or rethrow it as a custom exception
@@ -101,11 +106,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public List<GetFriendListResponse> getFriendList(String userId) {
+    public List<GetFriendListResponse> getFriendList(Principal principal) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         List<GetFriendListResponse> response = new ArrayList<>();
         try {
-            log.info("UserID: {}", userId);
-            response = userRepository.getFriendList(userId);
+//            log.info("UserID: {}", userId);
+            response = userRepository.getFriendList(user.getId());
 //            log.info("FriendRequest List: {}", response);
             return response;
         } catch (NestedRuntimeException | HibernateException e ) {

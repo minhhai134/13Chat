@@ -4,6 +4,7 @@ import SD.ChatApp.dto.user.*;
 import SD.ChatApp.model.User;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -16,7 +17,7 @@ public interface UserService {
 
     List<GetFriendRequestListResponse> getFriendRequestList(String userId);
 
-    List<GetFriendListResponse> getFriendList(String userId);
+    List<GetFriendListResponse> getFriendList(Principal principal);
 
     List<GetBlockListResponse> getBlockList(String userId);
 

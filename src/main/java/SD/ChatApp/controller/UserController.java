@@ -10,16 +10,22 @@ import SD.ChatApp.model.User;
 import SD.ChatApp.service.FriendService;
 import SD.ChatApp.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequestMapping("/api/user")
+@PreAuthorize("hasRole('USER')")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -36,7 +42,15 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
         User user = userService.login(request);
+        log.info("User login: {}", user);
         return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().user(user).build());
+    }
+
+    @GetMapping("/principal")
+    public ResponseEntity<Principal> getPrincipal(Principal principal){
+        log.info("Principal: {}", principal);
+        log.info("Auth: {}", SecurityContextHolder.getContext().getAuthentication());
+        return ResponseEntity.ok().body(principal);
     }
 
     //****************************************************************************************
@@ -54,8 +68,8 @@ public class UserController {
     }
 
     @GetMapping("/friend-list")
-    public ResponseEntity<List<GetFriendListResponse>> getFriendList(@RequestHeader("id") String userId){
-        List<GetFriendListResponse> response = userService.getFriendList(userId);
+    public ResponseEntity<List<GetFriendListResponse>> getFriendList(Principal principal){
+        List<GetFriendListResponse> response = userService.getFriendList(principal);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -105,10 +119,5 @@ public class UserController {
         friendService.unfriend(request);
         return ResponseEntity.status(HttpStatus.OK).body(UnfriendResponse.builder().status("ok").build());
     }
-
-
-
-
-
 
 }
