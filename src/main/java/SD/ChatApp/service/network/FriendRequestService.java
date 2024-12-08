@@ -1,7 +1,6 @@
-package SD.ChatApp.service;
+package SD.ChatApp.service.network;
 
-import SD.ChatApp.model.FriendRequest;
-import org.hibernate.annotations.SecondaryRow;
+import SD.ChatApp.model.network.FriendRequest;
 import org.springframework.stereotype.Service;
 
 @Service

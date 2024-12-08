@@ -7,7 +7,7 @@ import SD.ChatApp.dto.block.UnblockResponse;
 import SD.ChatApp.dto.friend.*;
 import SD.ChatApp.dto.user.*;
 import SD.ChatApp.model.User;
-import SD.ChatApp.service.FriendService;
+import SD.ChatApp.service.network.FriendService;
 import SD.ChatApp.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

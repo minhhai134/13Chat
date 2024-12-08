@@ -19,6 +19,17 @@ spring:
       ddl-auto: create-drop
     show-sql: true
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    stomp:
+      relay:
+        host: localhost
+        port: 61613
+        login: guest
+        passcode: guest
+
+
 application:
   security:
     jwt:

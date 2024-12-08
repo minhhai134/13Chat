@@ -6,14 +6,13 @@ import SD.ChatApp.exception.user.UserNameExistedException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.repository.UserRepository;
+import SD.ChatApp.service.network.BlockService;
+import SD.ChatApp.service.network.FriendRequestService;
+import SD.ChatApp.service.network.FriendService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
-import org.hibernate.MappingException;
-import org.hibernate.query.sqm.UnknownEntityException;
-import org.hibernate.tool.schema.spi.SchemaManagementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NestedRuntimeException;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 

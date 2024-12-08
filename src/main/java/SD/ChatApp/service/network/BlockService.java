@@ -1,6 +1,6 @@
-package SD.ChatApp.service;
+package SD.ChatApp.service.network;
 
-import SD.ChatApp.model.Block;
+import SD.ChatApp.model.network.Block;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package SD.ChatApp.service;
+package SD.ChatApp.service.network;
 
 import SD.ChatApp.dto.block.BlockRequest;
 import SD.ChatApp.dto.block.UnblockRequest;
@@ -11,9 +11,9 @@ import SD.ChatApp.exception.friend.FriendRelationshipNotFound;
 import SD.ChatApp.exception.friend.FriendRequestExistedException;
 import SD.ChatApp.exception.request.InvalidRequestException;
 import SD.ChatApp.exception.user.UserNotFoundException;
-import SD.ChatApp.model.Block;
-import SD.ChatApp.model.FriendRelation;
-import SD.ChatApp.model.FriendRequest;
+import SD.ChatApp.model.network.Block;
+import SD.ChatApp.model.network.FriendRelation;
+import SD.ChatApp.model.network.FriendRequest;
 import SD.ChatApp.repository.FriendRelationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

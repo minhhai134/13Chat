@@ -1,4 +1,4 @@
-package SD.ChatApp.model;
+package SD.ChatApp.model.network;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

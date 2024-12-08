@@ -1,5 +1,4 @@
-package SD.ChatApp.model;
-
+package SD.ChatApp.model.network;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,17 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "friend_relation")
+@Table(name = "block")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FriendRelation {
+public class Block {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String userId;
+    private String blockerUserId;
 
-    private String friendId;
+    private String destinationUserId;
+
 }

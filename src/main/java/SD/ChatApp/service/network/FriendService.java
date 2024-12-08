@@ -1,4 +1,4 @@
-package SD.ChatApp.service;
+package SD.ChatApp.service.network;
 
 import SD.ChatApp.dto.block.BlockRequest;
 import SD.ChatApp.dto.block.UnblockRequest;
@@ -6,9 +6,8 @@ import SD.ChatApp.dto.friend.DeleteFriendRequestRequest;
 import SD.ChatApp.dto.friend.FriendRequestRequest;
 import SD.ChatApp.dto.friend.ResponseAddFriendRequest;
 import SD.ChatApp.dto.friend.UnfriendRequest;
-import SD.ChatApp.model.Block;
-import SD.ChatApp.model.FriendRelation;
-import SD.ChatApp.model.FriendRequest;
+import SD.ChatApp.model.network.Block;
+import SD.ChatApp.model.network.FriendRequest;
 import org.springframework.stereotype.Service;
 
 @Service
