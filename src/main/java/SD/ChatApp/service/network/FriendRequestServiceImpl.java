@@ -1,7 +1,7 @@
 package SD.ChatApp.service.network;
 
 import SD.ChatApp.model.network.FriendRequest;
-import SD.ChatApp.repository.FriendRequestRepository;
+import SD.ChatApp.repository.network.FriendRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

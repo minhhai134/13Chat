@@ -1,4 +1,4 @@
-package SD.ChatApp.repository;
+package SD.ChatApp.repository.conversation;
 
 import SD.ChatApp.model.conversation.Message;
 import org.springframework.data.jpa.repository.JpaRepository;

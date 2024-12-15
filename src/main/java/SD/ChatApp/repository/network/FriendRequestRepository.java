@@ -1,4 +1,4 @@
-package SD.ChatApp.repository;
+package SD.ChatApp.repository.network;
 
 import SD.ChatApp.model.network.FriendRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -14,7 +14,7 @@ import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.network.Block;
 import SD.ChatApp.model.network.FriendRelation;
 import SD.ChatApp.model.network.FriendRequest;
-import SD.ChatApp.repository.FriendRelationRepository;
+import SD.ChatApp.repository.network.FriendRelationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

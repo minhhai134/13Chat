@@ -1,7 +1,7 @@
 package SD.ChatApp.service.network;
 
 import SD.ChatApp.model.network.Block;
-import SD.ChatApp.repository.BlockRepository;
+import SD.ChatApp.repository.network.BlockRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
