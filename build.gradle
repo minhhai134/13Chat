@@ -35,6 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'io.projectreactor.netty:reactor-netty'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'com.mysql:mysql-connector-j'

@@ -15,11 +15,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 public class MessageController {

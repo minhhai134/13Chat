@@ -37,3 +37,16 @@ application:
       expiration: 86400000
       refresh-token:
         expiration: 604800000
+
+#springdoc:
+#  api-docs:
+#    path: /api-docs          # Custom path for API documentation JSON
+#  swagger-ui:
+#    path: /swagger-ui        # Custom path for Swagger UI
+#    operations-sorter: method  # Sort API operations by HTTP method
+#    tags-sorter: alpha         # Sort API tags alphabetically
+#    disable-swagger-default-url: true  # Disable default Swagger Petstore URL
+#    doc-expansion: none       # Collapse all endpoints initially
+#    display-request-duration: true  # Display the request duration
+#  paths-to-match: /api/**     # Only include endpoints matching this path pattern
+#  show-actuator: true
