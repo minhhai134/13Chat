@@ -4,21 +4,25 @@ import SD.ChatApp.dto.block.BlockRequest;
 import SD.ChatApp.dto.block.UnblockRequest;
 import SD.ChatApp.dto.friend.DeleteFriendRequestRequest;
 import SD.ChatApp.dto.friend.FriendRequestRequest;
-import SD.ChatApp.dto.friend.ResponseAddFriendRequest;
+import SD.ChatApp.dto.friend.RespondAddFriendRequest;
 import SD.ChatApp.dto.friend.UnfriendRequest;
 import SD.ChatApp.exception.friend.FriendRelationshipExistedException;
 import SD.ChatApp.exception.friend.FriendRelationshipNotFound;
 import SD.ChatApp.exception.friend.FriendRequestExistedException;
 import SD.ChatApp.exception.request.InvalidRequestException;
 import SD.ChatApp.exception.user.UserNotFoundException;
+import SD.ChatApp.model.User;
 import SD.ChatApp.model.network.Block;
 import SD.ChatApp.model.network.FriendRelation;
 import SD.ChatApp.model.network.FriendRequest;
+import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.repository.network.FriendRelationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 @Slf4j
@@ -29,6 +33,8 @@ public class FriendServiceImpl implements FriendService {
     private BlockService blockService;
     @Autowired
     private FriendRequestService friendRequestService;
+    @Autowired
+    private UserRepository userRepository;
 
 
     public boolean checkFriendRelationship(String id1, String id2) {
@@ -52,8 +58,9 @@ public class FriendServiceImpl implements FriendService {
     }
 
 
-    public FriendRequest sendFriendRequest(FriendRequestRequest request) {
-        String senderId = request.getSenderId();
+    public FriendRequest sendFriendRequest(Principal principal, FriendRequestRequest request) {
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+        String senderId = user.getId();
         String receiverId = request.getReceiverId();
 
         if(blockService.checkBlockstatus(senderId, receiverId) || blockService.checkBlockstatus(receiverId, senderId))
@@ -70,10 +77,13 @@ public class FriendServiceImpl implements FriendService {
         return savedRequest;
     }
 
-    public void responseFriendRequest(ResponseAddFriendRequest request){
-        String requestId = request.getRequestId();
-        String receiverId = request.getReceiverId();
+    public void responseFriendRequest(Principal principal, RespondAddFriendRequest request){
+
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+        String receiverId = user.getId();
+
         String senderId = request.getSenderId();
+        String requestId = request.getRequestId();
         String response = request.getResponse();
 
         // Handle exceptions:
@@ -90,15 +100,20 @@ public class FriendServiceImpl implements FriendService {
         else throw new InvalidRequestException();
     }
 
-    public void deleteFriendRequest(DeleteFriendRequestRequest request){
+    public void deleteFriendRequest(Principal principal, DeleteFriendRequestRequest request){
 
         // Handle exceptions:
 
         friendRequestService.deleteFriendRequest(request.getRequestId());
     }
 
-    public Block block(BlockRequest request){
-        String blockerUserId = request.getBlockerUserId();
+    /*
+    Thua phuong thuc block, trong BlockService cung co??
+     */
+    public Block block(Principal principal, BlockRequest request){
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+        String blockerUserId = user.getId();
+
         String destinationUserId = request.getDestinationUserId();
 
         // Handle exceptions:
@@ -111,7 +126,6 @@ public class FriendServiceImpl implements FriendService {
 
     public void unblock(UnblockRequest request) {
          String blockId = request.getBlockId();
-         String blockerUserId = request.getBlockerUserId();
          String destinationUserId = request.getDestinationUserId();
 
          // Handle exception
@@ -120,9 +134,11 @@ public class FriendServiceImpl implements FriendService {
 
     }
 
-    public void unfriend(UnfriendRequest request) {
+    public void unfriend(Principal principal, UnfriendRequest request) {
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+
         String relationshipId = request.getRelationshipId();
-        String userId = request.getUserId();
+        String userId = user.getId();
         String friendId = request.getFriendId();
 
         // Handle exceptions:

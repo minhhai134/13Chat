@@ -13,13 +13,13 @@ public interface UserService {
 
     User login(LoginRequest request);
 
-    GetUserInfoResponse getUserInfo(String userId, String searchName);
+    GetUserInfoResponse getUserInfo(Principal userPrincipal, String searchName);
 
-    List<GetFriendRequestListResponse> getFriendRequestList(String userId);
+    List<GetFriendRequestListResponse> getFriendRequestList(Principal userPrincipal);
 
-    List<GetFriendListResponse> getFriendList(Principal principal);
+    List<GetFriendListResponse> getFriendList(Principal userPrincipal);
 
-    List<GetBlockListResponse> getBlockList(String userId);
+    List<GetBlockListResponse> getBlockList(Principal userPrincipal);
 
 
 }

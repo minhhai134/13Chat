@@ -4,29 +4,31 @@ import SD.ChatApp.dto.block.BlockRequest;
 import SD.ChatApp.dto.block.UnblockRequest;
 import SD.ChatApp.dto.friend.DeleteFriendRequestRequest;
 import SD.ChatApp.dto.friend.FriendRequestRequest;
-import SD.ChatApp.dto.friend.ResponseAddFriendRequest;
+import SD.ChatApp.dto.friend.RespondAddFriendRequest;
 import SD.ChatApp.dto.friend.UnfriendRequest;
 import SD.ChatApp.model.network.Block;
 import SD.ChatApp.model.network.FriendRequest;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+
 @Service
 public interface FriendService {
 
-    public boolean checkFriendRelationship(String id1, String id2);
+    boolean checkFriendRelationship(String id1, String id2);
 
 
-    FriendRequest sendFriendRequest(FriendRequestRequest request);
+    FriendRequest sendFriendRequest(Principal principal , FriendRequestRequest request);
 
-    void responseFriendRequest(ResponseAddFriendRequest request);
+    void responseFriendRequest(Principal principal, RespondAddFriendRequest request);
 
-    void deleteFriendRequest(DeleteFriendRequestRequest request);
+    void deleteFriendRequest(Principal principal, DeleteFriendRequestRequest request);
 
-    Block block(BlockRequest request);
+    Block block(Principal principal, BlockRequest request);
 
     void unblock(UnblockRequest request);
 
-    void unfriend(UnfriendRequest request);
+    void unfriend(Principal principal, UnfriendRequest request);
 
 
 }

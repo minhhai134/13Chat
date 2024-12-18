@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseAddFriendResponse {
+public class RespondAddFriendResponse {
     private String status;
 }

@@ -58,25 +58,27 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public GetUserInfoResponse getUserInfo(String userId, String searchName){
+    public GetUserInfoResponse getUserInfo(Principal userPrincipal, String searchName){
 
         StringBuilder relationship = new StringBuilder("non-relationship");
+
+        User user = userRepository.findByUsername(userPrincipal.getName()).orElseThrow();
 
         User foundUser = userRepository.findByName(searchName)
                 .orElseThrow(UserNotFoundException::new);
 
-        if(blockService.checkBlockstatus(userId, foundUser.getId()) || blockService.checkBlockstatus(foundUser.getId(), userId))
+        if(blockService.checkBlockstatus(user.getId(), foundUser.getId()) || blockService.checkBlockstatus(foundUser.getId(), user.getId()))
             throw new UserNotFoundException();
 
-        if(friendService.checkFriendRelationship(userId, foundUser.getId())){
+        if(friendService.checkFriendRelationship(user.getId(), foundUser.getId())){
             relationship.setLength(0);
             relationship.append("friend");
         }
-        else if(friendRequestService.checkFriendRequestSent(userId, foundUser.getId())){
+        else if(friendRequestService.checkFriendRequestSent(user.getId(), foundUser.getId())){
             relationship.setLength(0);
             relationship.append("friend-sent");
         }
-        else if(friendRequestService.checkFriendRequestSent(foundUser.getId(),userId)){
+        else if(friendRequestService.checkFriendRequestSent(foundUser.getId(),user.getId())){
             relationship.setLength(0);
             relationship.append("pending-friend-request");
         }
@@ -89,11 +91,12 @@ public class UserServiceImpl implements UserService {
                 build();
     }
 
-    public List<GetFriendRequestListResponse> getFriendRequestList(String userId) {
+    public List<GetFriendRequestListResponse> getFriendRequestList(Principal userPrincipal) {
+        User user = userRepository.findByUsername(userPrincipal.getName()).orElseThrow();
         List<GetFriendRequestListResponse> response = new ArrayList<>();
         try {
-            log.info("UserID: {}", userId);
-            response = userRepository.getFriendRequestList(userId);
+            log.info("UserID: {}", user.getId());
+            response = userRepository.getFriendRequestList(user.getId());
             log.info("FriendRequest List: {}", response);
             return response;
         } catch (Exception e ) {
@@ -122,11 +125,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public List<GetBlockListResponse> getBlockList(String userId) {
+    public List<GetBlockListResponse> getBlockList(Principal userPrincipal) {
+        User user = userRepository.findByUsername(userPrincipal.getName()).orElseThrow();
         List<GetBlockListResponse> response = new ArrayList<>();
         try {
-            log.info("UserID: {}", userId);
-            response = userRepository.getBlockList(userId);
+            log.info("UserID: {}", user.getId());
+            response = userRepository.getBlockList(user.getId());
 //            log.info("FriendRequest List: {}", response);
             return response;
         } catch (NestedRuntimeException | HibernateException e ) {

@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -34,17 +33,21 @@ public class UserController {
     private FriendService friendService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> createUser(@Valid @RequestBody RegisterRequest request){
+    public ResponseEntity<RegisterResponse> createUser(
+            @Valid @RequestBody RegisterRequest request){
         User user = userService.createUser(request);
         return ResponseEntity.status(HttpStatus.OK).body(RegisterResponse.builder().user(user).build());
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
-        User user = userService.login(request);
-        log.info("User login: {}", user);
-        return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().user(user).build());
-    }
+    /*
+    Đã chỉnh sửa phương thức xác thực
+     */
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
+//        User user = userService.login(request);
+//        log.info("User login: {}", user);
+//        return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().user(user).build());
+//    }
 
     @GetMapping("/principal")
     public ResponseEntity<Principal> getPrincipal(Principal principal){
@@ -56,14 +59,17 @@ public class UserController {
     //****************************************************************************************
 
     @GetMapping("/info/{searchName}")
-    public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestHeader("id") String userId,@PathVariable String searchName){
-        GetUserInfoResponse response = userService.getUserInfo(userId,searchName);
+    public ResponseEntity<GetUserInfoResponse> getUserInfo(
+            Principal userPrincipal,
+            @PathVariable String searchName){
+        GetUserInfoResponse response = userService.getUserInfo(userPrincipal,searchName);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/friend-request-list")
-    public ResponseEntity<List<GetFriendRequestListResponse>> getFriendRequestList(@RequestHeader("id") String userId){
-        List<GetFriendRequestListResponse> response = userService.getFriendRequestList(userId);
+    public ResponseEntity<List<GetFriendRequestListResponse>> getFriendRequestList(
+            Principal userPrincipal){
+        List<GetFriendRequestListResponse> response = userService.getFriendRequestList(userPrincipal);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -74,8 +80,8 @@ public class UserController {
     }
 
     @GetMapping("/block-list")
-    public ResponseEntity<List<GetBlockListResponse>> getBlockList(@RequestHeader("id") String userId){
-        List<GetBlockListResponse> response = userService.getBlockList(userId);
+    public ResponseEntity<List<GetBlockListResponse>> getBlockList(Principal principal){
+        List<GetBlockListResponse> response = userService.getBlockList(principal);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -84,27 +90,35 @@ public class UserController {
     //****************************************************************************************
 
     @PostMapping("/friend-request")
-    public ResponseEntity<FriendRequestResponse> sendFriendRequest(@Valid @RequestBody FriendRequestRequest request){
-        friendService.sendFriendRequest(request);
+    public ResponseEntity<FriendRequestResponse> sendFriendRequest(
+            Principal principal,
+            @Valid @RequestBody FriendRequestRequest request){
+        friendService.sendFriendRequest(principal, request);
         return ResponseEntity.status(HttpStatus.OK).body(FriendRequestResponse.builder().status("Request sent").build());
     }
 
     @PatchMapping("/friend-request")
-    public ResponseEntity<ResponseAddFriendResponse> responseFriendRequest(@Valid @RequestBody ResponseAddFriendRequest request){
-        friendService.responseFriendRequest(request);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseAddFriendResponse.builder().status("ok").build());
+    public ResponseEntity<RespondAddFriendResponse> responseFriendRequest(
+            Principal principal,
+            @Valid @RequestBody RespondAddFriendRequest request){
+        friendService.responseFriendRequest(principal, request);
+        return ResponseEntity.status(HttpStatus.OK).body(RespondAddFriendResponse.builder().status("ok").build());
     }
 
     @DeleteMapping("/friend-request")
-    public ResponseEntity<DeleteFriendRequestResponse> deleteFriendRequest(@Valid @RequestBody DeleteFriendRequestRequest request){
-        friendService.deleteFriendRequest(request);
+    public ResponseEntity<DeleteFriendRequestResponse> deleteFriendRequest(
+            Principal principal,
+            @Valid @RequestBody DeleteFriendRequestRequest request){
+        friendService.deleteFriendRequest(principal, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(DeleteFriendRequestResponse.builder().status("ok").build());
     }
 
     @PostMapping("/block")
-    public ResponseEntity<BlockResponse> block(@Valid @RequestBody BlockRequest request){
-        friendService.block(request);
+    public ResponseEntity<BlockResponse> block(
+            Principal principal,
+            @Valid @RequestBody BlockRequest request){
+        friendService.block(principal, request);
         return ResponseEntity.status(HttpStatus.OK).body(BlockResponse.builder().status("ok").build());
     }
 
@@ -115,8 +129,10 @@ public class UserController {
     }
 
     @DeleteMapping("/friend")
-    public ResponseEntity<UnfriendResponse> unblock(@Valid @RequestBody UnfriendRequest request){
-        friendService.unfriend(request);
+    public ResponseEntity<UnfriendResponse> unblock(
+            Principal principal,
+            @Valid @RequestBody UnfriendRequest request){
+        friendService.unfriend(principal, request);
         return ResponseEntity.status(HttpStatus.OK).body(UnfriendResponse.builder().status("ok").build());
     }
 

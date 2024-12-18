@@ -8,8 +8,6 @@ import lombok.Data;
 public class UnfriendRequest {
     private String relationshipId;
 
-    private String userId;
-
     private String friendId;
 
 }

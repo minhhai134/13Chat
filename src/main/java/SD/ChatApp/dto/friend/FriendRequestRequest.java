@@ -6,7 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class FriendRequestRequest {
-    private String senderId;
-
     private String receiverId;
 }

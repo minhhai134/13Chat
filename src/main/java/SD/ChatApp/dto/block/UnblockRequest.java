@@ -8,7 +8,5 @@ import lombok.Data;
 public class UnblockRequest {
     private String blockId;
 
-    private String blockerUserId;
-
     private String destinationUserId;
 }

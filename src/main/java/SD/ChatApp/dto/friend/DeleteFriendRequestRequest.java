@@ -8,7 +8,5 @@ import lombok.Data;
 public class DeleteFriendRequestRequest {
     private String requestId;
 
-    private String senderId;
-
     private String receiverId;
 }

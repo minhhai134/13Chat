@@ -5,10 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseAddFriendRequest {
+public class RespondAddFriendRequest {
     private String requestId;
-
-    private String receiverId;
 
     private String senderId;
 
