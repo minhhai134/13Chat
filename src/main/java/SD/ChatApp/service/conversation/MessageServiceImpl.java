@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -87,4 +88,9 @@ public class MessageServiceImpl implements MessageService {
 
     }
 
+    public List<Message> getMessages(Principal principal, String conversationId, long pivotId){
+
+
+        return messageRepository.getMessage(conversationId, pivotId);
+    }
 }
