@@ -1,11 +1,13 @@
 package SD.ChatApp.model.conversation;
 
-import SD.ChatApp.model.entity.Conversation_Type;
+import SD.ChatApp.model.enums.Conversation_Type;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "conversations")
@@ -19,5 +21,7 @@ public class Conversation {
     private String id;
 
     private Conversation_Type type;
+
+    private Instant lastActive;
 
 }

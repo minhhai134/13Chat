@@ -1,14 +1,20 @@
 package SD.ChatApp.controller;
 
-import SD.ChatApp.dto.conversation.GetConversationListResponse;
+import SD.ChatApp.dto.conversation.CreateOneToOneConversationRequest;
+import SD.ChatApp.dto.conversation.CreateOneToOneConversationResponse;
+import SD.ChatApp.dto.conversation.GetOneToOneConversationListResponse;
+import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.service.conversation.ConversationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/conversation")
@@ -17,13 +23,24 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ConversationController {
 
-    @GetMapping
-    public ResponseEntity<GetConversationListResponse> getConversationList(){
-        
+    private final ConversationService conversationService;
 
-
-        return null;
+    @PostMapping("/new")
+    public ResponseEntity<CreateOneToOneConversationResponse> createOneToOneConversation(
+            Principal principal,
+            @Valid @RequestBody CreateOneToOneConversationRequest request){
+        CreateOneToOneConversationResponse response = conversationService.createOneToOneConversation(principal, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response) ;
     }
+
+    @GetMapping
+    public ResponseEntity<List<GetOneToOneConversationListResponse>> getConversationList(
+            Principal principal,
+            @RequestHeader Membership_Status membershipStatus){
+        List<GetOneToOneConversationListResponse> response = conversationService.getConversationList(principal, membershipStatus);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
 
 

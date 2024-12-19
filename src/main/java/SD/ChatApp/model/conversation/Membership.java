@@ -1,6 +1,6 @@
 package SD.ChatApp.model.conversation;
 
-import SD.ChatApp.model.entity.Membership_Status;
+import SD.ChatApp.model.enums.Membership_Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

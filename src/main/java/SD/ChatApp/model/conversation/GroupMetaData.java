@@ -23,5 +23,4 @@ public class GroupMetaData {
 
     private String adminId;
 
-
 }

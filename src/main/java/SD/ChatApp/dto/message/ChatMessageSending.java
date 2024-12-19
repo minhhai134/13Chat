@@ -1,6 +1,7 @@
 package SD.ChatApp.dto.message;
 
-import SD.ChatApp.model.entity.Message_Type;
+import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.model.enums.Message_Type;
 import lombok.Builder;
 import lombok.Data;
 import java.time.Instant;
@@ -18,6 +19,11 @@ public class ChatMessageSending {
     private Instant sentTime;
 
     private Message_Type type;
+
+    /*
+    Membership_Status cua sender
+     */
+    private Membership_Status membershipStatus;
 
     private String content;
 }
