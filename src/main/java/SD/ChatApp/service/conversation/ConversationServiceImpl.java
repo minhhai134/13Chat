@@ -1,5 +1,6 @@
 package SD.ChatApp.service.conversation;
 
+import SD.ChatApp.dto.conversation.ChangeMembershipStatusRequest;
 import SD.ChatApp.dto.conversation.CreateOneToOneConversationRequest;
 import SD.ChatApp.dto.conversation.CreateOneToOneConversationResponse;
 import SD.ChatApp.dto.conversation.GetOneToOneConversationListResponse;
@@ -86,5 +87,16 @@ public class ConversationServiceImpl implements ConversationService {
 //        String memberShip_status = membershipStatus.name();
 
         return conversationRepository.GetOnetoOneConversationList(user.getId(), membershipStatus);
+    }
+
+    public Membership changeMembershipStatus(
+            Principal principal,
+            ChangeMembershipStatusRequest request){
+        log.info("Request: {}", request);
+        Membership membership = membershipRepository.findById(request.getMembershipId()).orElseThrow();
+        membership.setStatus(request.getNewStatus());
+        log.info("Membership: {}", membership);
+        return membershipRepository.save(membership);
+
     }
 }

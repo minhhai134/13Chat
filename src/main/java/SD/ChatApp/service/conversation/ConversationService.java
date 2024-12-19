@@ -1,8 +1,10 @@
 package SD.ChatApp.service.conversation;
 
+import SD.ChatApp.dto.conversation.ChangeMembershipStatusRequest;
 import SD.ChatApp.dto.conversation.CreateOneToOneConversationRequest;
 import SD.ChatApp.dto.conversation.CreateOneToOneConversationResponse;
 import SD.ChatApp.dto.conversation.GetOneToOneConversationListResponse;
+import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.model.enums.Membership_Status;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +21,8 @@ public interface ConversationService {
     List<GetOneToOneConversationListResponse> getConversationList(
             Principal principal,
             Membership_Status membershipStatus);
+
+     Membership changeMembershipStatus(
+            Principal principal,
+            ChangeMembershipStatusRequest request);
 }

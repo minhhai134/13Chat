@@ -28,4 +28,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
     List<GetOneToOneConversationListResponse> GetOnetoOneConversationList(
             @Param("id")String userId,
             @Param("status") Membership_Status memberShip_status);
+
+
+
 }

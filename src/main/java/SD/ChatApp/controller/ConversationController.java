@@ -1,8 +1,7 @@
 package SD.ChatApp.controller;
 
-import SD.ChatApp.dto.conversation.CreateOneToOneConversationRequest;
-import SD.ChatApp.dto.conversation.CreateOneToOneConversationResponse;
-import SD.ChatApp.dto.conversation.GetOneToOneConversationListResponse;
+import SD.ChatApp.dto.conversation.*;
+import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.model.enums.Membership_Status;
 import SD.ChatApp.service.conversation.ConversationService;
 import jakarta.validation.Valid;
@@ -40,6 +39,16 @@ public class ConversationController {
         List<GetOneToOneConversationListResponse> response = conversationService.getConversationList(principal, membershipStatus);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @PatchMapping("/change_membership")
+    public ResponseEntity<ChangeMembershipStatusResponse> changeMembershipStatus(
+            Principal principal,
+            @RequestBody ChangeMembershipStatusRequest request){
+        Membership membership = conversationService.changeMembershipStatus(principal, request);
+        return ResponseEntity.status(HttpStatus.OK).body(ChangeMembershipStatusResponse.builder().membership(membership).build());
+    }
+
+
 
 
 
