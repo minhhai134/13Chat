@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public interface MessageService {
-     ChatMessageReceiving sendMessage(ChatMessageSending message, Principal userPrincipal);
+     ChatMessageReceiving sendOneToOneMessage(Principal principal, ChatMessageSending input);
 
      List<Message> getMessages(Principal principal, String conversationId, long pivotId);
 }

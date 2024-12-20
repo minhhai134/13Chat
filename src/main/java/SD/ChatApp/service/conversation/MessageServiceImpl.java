@@ -1,5 +1,6 @@
 package SD.ChatApp.service.conversation;
 
+import SD.ChatApp.aop.blockchecker.BlockCheck;
 import SD.ChatApp.dto.message.ChatMessageReceiving;
 import SD.ChatApp.dto.message.ChatMessageSending;
 import SD.ChatApp.exception.user.UserNotFoundException;
@@ -31,8 +32,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final BlockService blockService;
 
-
-    public ChatMessageReceiving sendMessage(ChatMessageSending message, Principal principal){
+    public ChatMessageReceiving sendOneToOneMessage(Principal principal, ChatMessageSending message){
 
         User sender = userRepository.findByUsername(principal.getName()).orElseThrow();
 
@@ -89,7 +89,6 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public List<Message> getMessages(Principal principal, String conversationId, long pivotId){
-
 
         return messageRepository.getMessage(conversationId, pivotId);
     }

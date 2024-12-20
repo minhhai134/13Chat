@@ -48,7 +48,15 @@ public class ConversationController {
         return ResponseEntity.status(HttpStatus.OK).body(ChangeMembershipStatusResponse.builder().membership(membership).build());
     }
 
+    @PostMapping("/create_group")
+    public ResponseEntity<CreateGroupResponse> createGroup(
+            Principal principal,
+            @RequestBody CreateGroupRequest request){
+        CreateGroupResponse response = conversationService.createGroupConversation(principal, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
+//    @PostMapping("/add_member")
 
 
 

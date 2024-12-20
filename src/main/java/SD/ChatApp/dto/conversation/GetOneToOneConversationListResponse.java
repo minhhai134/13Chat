@@ -30,4 +30,6 @@ public class GetOneToOneConversationListResponse {
 
     private String friendName;
 
+    private String blocker;
+
 }

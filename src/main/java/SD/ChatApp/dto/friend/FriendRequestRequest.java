@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class FriendRequestRequest {
+public class FriendRequestRequest{
     private String receiverId;
 }

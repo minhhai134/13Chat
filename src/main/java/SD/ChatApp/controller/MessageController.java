@@ -28,11 +28,10 @@ public class MessageController {
 
     @MessageMapping("/chat")
     @SendToUser("/queue/messages")
-    public ChatMessageReceiving sendMessage(ChatMessageSending input, Principal userPrincipal) throws JsonProcessingException {
+    public ChatMessageReceiving sendOneToOneMessage(Principal principal, ChatMessageSending input) throws JsonProcessingException {
         log.info("got input {}", input);
 
-
-        ChatMessageReceiving chatMessage = messageService.sendMessage(input, userPrincipal);
+        ChatMessageReceiving chatMessage = messageService.sendOneToOneMessage(principal, input);
         // send chat message to topic exchange
         String routingKey = "chat.private." + input.getReceiverId();
         messagingTemplate.convertAndSendToUser(
