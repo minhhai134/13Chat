@@ -1,5 +1,6 @@
 package SD.ChatApp.exception.handler;
 
+import SD.ChatApp.exception.conversation.LeaveGroupException;
 import SD.ChatApp.exception.friend.FriendRelationshipExistedException;
 import SD.ChatApp.exception.friend.FriendRelationshipNotFound;
 import SD.ChatApp.exception.friend.FriendRequestExistedException;
@@ -34,6 +35,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             FriendRelationshipNotFound.class, HttpStatus.CONFLICT,
             NameExistedException.class, HttpStatus.CONFLICT,
             DataAccessException.class, HttpStatus.INTERNAL_SERVER_ERROR
+//            LeaveGroupException.class, HttpStatus.CONFLICT
     );
 
 
@@ -47,6 +49,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             FriendRelationshipNotFound.class, "FRIEND_RELATIONSHIP_NOT_FOUND",
             NameExistedException.class, "NAME_EXISTED",
             DataAccessException.class, "DATABASE_CONFLICT"
+//            LeaveGroupException.class, "LEAVE GROUP NOT SUCCESS"
     );
 
     @ExceptionHandler()

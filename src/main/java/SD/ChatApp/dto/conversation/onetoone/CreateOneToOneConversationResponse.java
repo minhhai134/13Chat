@@ -1,15 +1,13 @@
-package SD.ChatApp.dto.conversation;
+package SD.ChatApp.dto.conversation.onetoone;
 
 import SD.ChatApp.model.conversation.Conversation;
-import SD.ChatApp.model.conversation.GroupMetaData;
 import SD.ChatApp.model.conversation.Membership;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class CreateGroupResponse {
+public class CreateOneToOneConversationResponse {
     private Conversation conversation;
-    private GroupMetaData metaData;
-    private Membership adminMembership;
+    private Membership membership;
 }

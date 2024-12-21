@@ -1,6 +1,12 @@
 package SD.ChatApp.controller;
 
-import SD.ChatApp.dto.conversation.*;
+import SD.ChatApp.dto.conversation.common.ChangeMembershipStatusRequest;
+import SD.ChatApp.dto.conversation.common.ChangeMembershipStatusResponse;
+import SD.ChatApp.dto.conversation.common.GetConversationListResponse;
+import SD.ChatApp.dto.conversation.group.*;
+import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationRequest;
+import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
+import SD.ChatApp.dto.conversation.common.OneToOneConversationList;
 import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.model.enums.Membership_Status;
 import SD.ChatApp.service.conversation.ConversationService;
@@ -33,17 +39,17 @@ public class ConversationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetOneToOneConversationListResponse>> getConversationList(
+    public ResponseEntity<GetConversationListResponse> getConversationList(
             Principal principal,
             @RequestHeader Membership_Status membershipStatus){
-        List<GetOneToOneConversationListResponse> response = conversationService.getConversationList(principal, membershipStatus);
+        GetConversationListResponse response = conversationService.getConversationList(principal, membershipStatus);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping("/change_membership")
     public ResponseEntity<ChangeMembershipStatusResponse> changeMembershipStatus(
             Principal principal,
-            @RequestBody ChangeMembershipStatusRequest request){
+            @Valid @RequestBody ChangeMembershipStatusRequest request){
         Membership membership = conversationService.changeMembershipStatus(principal, request);
         return ResponseEntity.status(HttpStatus.OK).body(ChangeMembershipStatusResponse.builder().membership(membership).build());
     }
@@ -51,12 +57,39 @@ public class ConversationController {
     @PostMapping("/create_group")
     public ResponseEntity<CreateGroupResponse> createGroup(
             Principal principal,
-            @RequestBody CreateGroupRequest request){
+            @Valid @RequestBody CreateGroupRequest request
+            ){
+        log.info("{}", request);
         CreateGroupResponse response = conversationService.createGroupConversation(principal, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+//        return null;
+
+    }
+
+    @PostMapping("/add_member")
+    public ResponseEntity<AddMemberResponse> addMember(
+            Principal principal,
+            @Valid @RequestBody AddMemberRequest request){
+        AddMemberResponse response = conversationService.addMember(principal, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-//    @PostMapping("/add_member")
+    @DeleteMapping("/leave_group")
+    public ResponseEntity<LeaveGroupResponse> leaveGroup(
+            Principal principal,
+            @Valid @RequestBody LeaveGroupRequest request){
+        LeaveGroupResponse response = conversationService.leaveGroup(principal, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/delete_member")
+    public ResponseEntity<DeleteMemberResponse> deleteMember(
+            Principal principal,
+            @Valid @RequestBody DeleteMemberRequest request){
+        DeleteMemberResponse response = conversationService.deleteMember(principal, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
 
 

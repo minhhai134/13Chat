@@ -1,4 +1,4 @@
-package SD.ChatApp.dto.conversation;
+package SD.ChatApp.dto.conversation.group;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,4 +7,5 @@ import lombok.Data;
 @Builder
 public class CreateGroupRequest {
     private String groupName;
+    private String fixBug;
 }

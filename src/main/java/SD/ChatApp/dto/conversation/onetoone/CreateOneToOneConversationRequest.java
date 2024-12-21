@@ -1,4 +1,4 @@
-package SD.ChatApp.dto.conversation;
+package SD.ChatApp.dto.conversation.onetoone;
 
 import lombok.Builder;
 import lombok.Data;

@@ -37,7 +37,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-
         // Check authHeader
         String authHeader = request.getHeader("Authorization");
         if(!authHeader.startsWith("Bearer ")){

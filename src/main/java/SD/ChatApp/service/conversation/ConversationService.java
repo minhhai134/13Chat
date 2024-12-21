@@ -1,6 +1,11 @@
 package SD.ChatApp.service.conversation;
 
-import SD.ChatApp.dto.conversation.*;
+import SD.ChatApp.dto.conversation.common.ChangeMembershipStatusRequest;
+import SD.ChatApp.dto.conversation.common.GetConversationListResponse;
+import SD.ChatApp.dto.conversation.group.*;
+import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationRequest;
+import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
+import SD.ChatApp.dto.conversation.common.OneToOneConversationList;
 import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.model.enums.Membership_Status;
 import org.springframework.stereotype.Service;
@@ -15,7 +20,7 @@ public interface ConversationService {
             Principal principal,
             CreateOneToOneConversationRequest request);
 
-    List<GetOneToOneConversationListResponse> getConversationList(
+    GetConversationListResponse getConversationList(
             Principal principal,
             Membership_Status membershipStatus);
 
@@ -26,4 +31,18 @@ public interface ConversationService {
     CreateGroupResponse createGroupConversation(
             Principal principal,
             CreateGroupRequest request);
+
+    AddMemberResponse addMember(
+            Principal principal,
+            AddMemberRequest request);
+
+    LeaveGroupResponse leaveGroup(
+            Principal principal,
+            LeaveGroupRequest request);
+
+    DeleteMemberResponse deleteMember(
+            Principal principal,
+            DeleteMemberRequest request
+    );
+
 }

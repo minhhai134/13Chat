@@ -1,4 +1,4 @@
-package SD.ChatApp.dto.conversation;
+package SD.ChatApp.dto.conversation.common;
 
 import SD.ChatApp.model.conversation.Membership;
 import lombok.Builder;
