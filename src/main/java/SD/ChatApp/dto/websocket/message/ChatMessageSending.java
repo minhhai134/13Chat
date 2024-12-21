@@ -1,5 +1,6 @@
-package SD.ChatApp.dto.message;
+package SD.ChatApp.dto.websocket.message;
 
+import SD.ChatApp.model.enums.Conversation_Type;
 import SD.ChatApp.model.enums.Membership_Status;
 import SD.ChatApp.model.enums.Message_Type;
 import lombok.Builder;
@@ -11,14 +12,16 @@ import java.time.Instant;
 public class ChatMessageSending {
 
     private String conversationId;
+
+    private Conversation_Type conversationType;
 //
 //    private String senderId;
 
-    private String receiverId;
+    private String destinationId;
 
     private Instant sentTime;
 
-    private Message_Type type;
+    private Message_Type messageType;
 
     /*
     Membership_Status cua sender

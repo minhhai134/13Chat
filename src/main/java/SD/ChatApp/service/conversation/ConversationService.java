@@ -5,7 +5,6 @@ import SD.ChatApp.dto.conversation.common.GetConversationListResponse;
 import SD.ChatApp.dto.conversation.group.*;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationRequest;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
-import SD.ChatApp.dto.conversation.common.OneToOneConversationList;
 import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.model.enums.Membership_Status;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,10 @@ public interface ConversationService {
 
     DeleteMemberResponse deleteMember(
             Principal principal,
-            DeleteMemberRequest request
-    );
+            DeleteMemberRequest request);
+
+    List<GetGroupMemberResponse> getMemberList(
+            Principal principal,
+            String conversationId);
 
 }

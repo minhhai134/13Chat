@@ -1,6 +1,6 @@
 package SD.ChatApp.model.enums;
 
-public enum onlineStatus {
+public enum OnlineStatus {
     DISPLAY,
     HIDE
 }

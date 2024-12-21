@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 @Builder
 @AllArgsConstructor
-public class OneToOneConversationList {
+public class OneToOneConversationDto {
 
     private String id;
 
@@ -23,7 +23,7 @@ public class OneToOneConversationList {
 
     private Instant friendLastSeen;
 
-    public OneToOneConversationList(String id, Conversation_Type conversationType, Instant conversationLastActive, Instant friendLastSeen, String friendId, String friendName) {
+    public OneToOneConversationDto(String id, Conversation_Type conversationType, Instant conversationLastActive, Instant friendLastSeen, String friendId, String friendName) {
         this.id = id;
         this.conversationType = conversationType;
         this.conversationLastActive = conversationLastActive;

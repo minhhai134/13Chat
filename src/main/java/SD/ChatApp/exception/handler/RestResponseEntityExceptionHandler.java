@@ -1,5 +1,6 @@
 package SD.ChatApp.exception.handler;
 
+import SD.ChatApp.exception.conversation.GroupNotFoundException;
 import SD.ChatApp.exception.conversation.LeaveGroupException;
 import SD.ChatApp.exception.friend.FriendRelationshipExistedException;
 import SD.ChatApp.exception.friend.FriendRelationshipNotFound;
@@ -28,28 +29,31 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     private static final Map<Class<? extends RuntimeException>, HttpStatus> EXCEPTION_TO_HTTP_STATUS_CODE = Map.of(
             BadCredentialsException.class, HttpStatus.FORBIDDEN,
             UserNotFoundException.class, HttpStatus.NOT_FOUND,
+//            GroupNotFoundException.class,  HttpStatus.NOT_FOUND,
             UserNameExistedException.class, HttpStatus.CONFLICT,
             FriendRelationshipExistedException.class, HttpStatus.CONFLICT,
             FriendRequestExistedException.class, HttpStatus.CONFLICT,
             InvalidRequestException.class, HttpStatus.BAD_REQUEST,
             FriendRelationshipNotFound.class, HttpStatus.CONFLICT,
             NameExistedException.class, HttpStatus.CONFLICT,
-            DataAccessException.class, HttpStatus.INTERNAL_SERVER_ERROR
-//            LeaveGroupException.class, HttpStatus.CONFLICT
+            DataAccessException.class, HttpStatus.INTERNAL_SERVER_ERROR,
+            LeaveGroupException.class, HttpStatus.CONFLICT
     );
 
 
     private static final Map<Class<? extends RuntimeException>, String> EXCEPTION_TO_ERROR_CODE = Map.of(
             BadCredentialsException.class, "BAD_CREDENTIALS",
             UserNotFoundException.class, "USER_NOT_FOUND",
+//            GroupNotFoundException.class, "GROUP_NOT_FOUND",
             UserNameExistedException.class, "USER_NAME_EXISTED",
             FriendRelationshipExistedException.class, "FRIEND_RELATIONSHIP_EXISTED",
             FriendRequestExistedException.class, "FRIEND_REQUEST_EXISTED",
             InvalidRequestException.class, "INVALID_REQUEST_BODY",
             FriendRelationshipNotFound.class, "FRIEND_RELATIONSHIP_NOT_FOUND",
             NameExistedException.class, "NAME_EXISTED",
-            DataAccessException.class, "DATABASE_CONFLICT"
-//            LeaveGroupException.class, "LEAVE GROUP NOT SUCCESS"
+            DataAccessException.class, "DATABASE_CONFLICT",
+            LeaveGroupException.class, "LEAVE_GROUP_NOT_SUCCESS"
+
     );
 
     @ExceptionHandler()

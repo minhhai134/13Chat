@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 @Builder
 public class GetConversationListResponse {
-    private List<OneToOneConversationList> oneToOneList;
-    private List<GroupConversationList> groupList;
+    private List<OneToOneConversationDto> oneToOneList;
+    private List<GroupConversationDto> groupList;
 }

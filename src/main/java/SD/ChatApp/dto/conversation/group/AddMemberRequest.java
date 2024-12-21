@@ -8,4 +8,5 @@ import lombok.Data;
 public class AddMemberRequest {
     private String conversationId;
     private String memberId;
+    private String groupName;
 }

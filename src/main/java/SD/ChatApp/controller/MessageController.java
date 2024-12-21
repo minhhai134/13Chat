@@ -1,7 +1,7 @@
 package SD.ChatApp.controller;
 
-import SD.ChatApp.dto.message.ChatMessageReceiving;
-import SD.ChatApp.dto.message.ChatMessageSending;
+import SD.ChatApp.dto.websocket.message.ChatMessageReceiving;
+import SD.ChatApp.dto.websocket.message.ChatMessageSending;
 import SD.ChatApp.dto.message.GetMessagesResponse;
 import SD.ChatApp.model.conversation.Message;
 import SD.ChatApp.service.conversation.MessageService;
@@ -22,25 +22,33 @@ import java.util.List;
 @RequestMapping("/api/message")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/chat")
+    @MessageMapping("/one_to_one_chat")
     @SendToUser("/queue/messages")
     public ChatMessageReceiving sendOneToOneMessage(Principal principal, ChatMessageSending input) throws JsonProcessingException {
         log.info("got input {}", input);
 
-        ChatMessageReceiving chatMessage = messageService.sendOneToOneMessage(principal, input);
+        ChatMessageReceiving chatMessage = messageService.sendMessage(principal, input);
         // send chat message to topic exchange
-        String routingKey = "chat.private." + input.getReceiverId();
+        String routingKey = "chat.private." + input.getDestinationId();
         messagingTemplate.convertAndSendToUser(
-                input.getReceiverId(), "/queue/messages", input);
+                input.getDestinationId(), "/queue/messages", chatMessage);
         // rabbitTemplate.convertAndSend(MessageQueueConfig.CHAT_EXCHANGE, routingKey,
         // objectMapper.writeValueAsString(chatMessage));
 //        log.info("sent message to chat exchange = {}, routing Key = {}, message = {}",
 //                MessageQueueConfig.CHAT_EXCHANGE,
 //                routingKey, chatMessage);
+        return chatMessage;
+    }
+
+    @MessageMapping("/group_chat")
+    public ChatMessageReceiving sendGroupMessage(Principal principal, ChatMessageSending input) throws JsonProcessingException{
+        ChatMessageReceiving chatMessage = messageService.sendMessage(principal, input);
+        messagingTemplate.convertAndSend("/topic/"+input.getDestinationId(), input);
         return chatMessage;
     }
 

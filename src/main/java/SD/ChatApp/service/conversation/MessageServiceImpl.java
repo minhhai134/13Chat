@@ -1,13 +1,14 @@
 package SD.ChatApp.service.conversation;
 
-import SD.ChatApp.aop.blockchecker.BlockCheck;
-import SD.ChatApp.dto.message.ChatMessageReceiving;
-import SD.ChatApp.dto.message.ChatMessageSending;
+import SD.ChatApp.dto.websocket.message.ChatMessageReceiving;
+import SD.ChatApp.dto.websocket.message.ChatMessageSending;
+import SD.ChatApp.exception.conversation.GroupNotFoundException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.model.conversation.Conversation;
 import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.model.conversation.Message;
+import SD.ChatApp.model.enums.Conversation_Type;
 import SD.ChatApp.model.enums.Membership_Status;
 import SD.ChatApp.repository.conversation.ConversationRepository;
 import SD.ChatApp.repository.conversation.MembershipRepository;
@@ -32,35 +33,13 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final BlockService blockService;
 
-    public ChatMessageReceiving sendOneToOneMessage(Principal principal, ChatMessageSending message){
-
-        User sender = userRepository.findByUsername(principal.getName()).orElseThrow();
-
-        User receiver = userRepository.findByUsername(message.getReceiverId()).
-                orElseThrow(UserNotFoundException::new);
-
-        log.info("Message: {}", message);
-
-
-        // Handle invalid message:
-
-        if(blockService.checkBlockstatus(sender.getId(), receiver.getId())
-                || blockService.checkBlockstatus(receiver.getId(), sender.getId())) {
-            throw new UserNotFoundException();
-        }
-
-        /*
-        Existed conversation
-         */
-
-        // Need to CHECK MEMBERSHIP
-
+    private Message saveMessage(User sender, ChatMessageSending message){
         Message savedMesssage = messageRepository.save(
                 Message.builder().
                         conversationId(message.getConversationId()).
                         senderId(sender.getId()).
                         sentTime(message.getSentTime()).
-                        type(message.getType()).
+                        type(message.getMessageType()).
                         content(message.getContent()).
                         build()
         );
@@ -68,6 +47,7 @@ public class MessageServiceImpl implements MessageService {
         /*
         Update Membership_Status if needed
          */
+        log.info("Message:{}", message);
         if(message.getMembershipStatus()==Membership_Status.PENDING){
             Membership membership = membershipRepository.findByConversationIdAndUserId(
                     message.getConversationId(), sender.getId()).orElseThrow();
@@ -82,10 +62,54 @@ public class MessageServiceImpl implements MessageService {
         conversation.setLastActive(message.getSentTime());
         conversationRepository.save(conversation);
 
-        return ChatMessageReceiving.builder().
-                message(savedMesssage).receiverId(receiver.getId())
-                .build();
+        return savedMesssage;
+    }
 
+    private String checkMessageDestination(User sender, ChatMessageSending message) throws RuntimeException{
+        if(message.getConversationType()== Conversation_Type.OneToOne){
+            User receiver = userRepository.findByUsername(message.getDestinationId()).
+                    orElseThrow(UserNotFoundException::new);
+            if(blockService.checkBlockstatus(sender.getId(), receiver.getId())
+                    || blockService.checkBlockstatus(receiver.getId(), sender.getId())) {
+                throw new UserNotFoundException();
+            }
+            return receiver.getId();
+
+        }
+        else if(message.getConversationType()== Conversation_Type.Group){
+            Conversation groupConversation = conversationRepository.findById(message.getDestinationId()).
+                    orElseThrow(GroupNotFoundException::new);
+            return groupConversation.getId();
+        }
+        else return null;
+    }
+
+    public ChatMessageReceiving sendMessage(
+            Principal principal,
+            ChatMessageSending message){
+
+        User sender = userRepository.findByUsername(principal.getName()).orElseThrow();
+
+//        User receiver = userRepository.findByUsername(message.getReceiverId()).
+//                orElseThrow(UserNotFoundException::new);
+        String destinationId = checkMessageDestination(sender, message);
+
+        log.info("Message: {}", message);
+
+
+        // Handle invalid message:
+
+
+        /*
+        Existed conversation
+         */
+
+        // Need to CHECK MEMBERSHIP
+        Message savedMesssage = saveMessage(sender, message);
+
+        return ChatMessageReceiving.builder().
+                message(savedMesssage).destinationId(destinationId)
+                .build();
     }
 
     public List<Message> getMessages(Principal principal, String conversationId, long pivotId){

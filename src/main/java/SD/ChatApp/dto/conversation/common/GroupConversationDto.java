@@ -10,7 +10,7 @@ import java.time.Instant;
 @Data
 @Builder
 @AllArgsConstructor
-public class GroupConversationList {
+public class GroupConversationDto {
     private String conversationId;
 
     private Conversation_Type type;

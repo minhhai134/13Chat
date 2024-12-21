@@ -2,11 +2,12 @@ package SD.ChatApp.service.conversation;
 
 import SD.ChatApp.dto.conversation.common.ChangeMembershipStatusRequest;
 import SD.ChatApp.dto.conversation.common.GetConversationListResponse;
-import SD.ChatApp.dto.conversation.common.GroupConversationList;
+import SD.ChatApp.dto.conversation.common.GroupConversationDto;
 import SD.ChatApp.dto.conversation.group.*;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationRequest;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
-import SD.ChatApp.dto.conversation.common.OneToOneConversationList;
+import SD.ChatApp.dto.conversation.common.OneToOneConversationDto;
+import SD.ChatApp.dto.websocket.conversation.NewGroupNotification;
 import SD.ChatApp.exception.conversation.LeaveGroupException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
@@ -22,6 +23,7 @@ import SD.ChatApp.repository.conversation.MembershipRepository;
 import SD.ChatApp.service.network.BlockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -38,6 +40,7 @@ public class ConversationServiceImpl implements ConversationService {
     private final BlockService blockService;
     private final MembershipRepository membershipRepository;
     private final GroupMetaDataRepository groupMetaDataRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public CreateOneToOneConversationResponse createOneToOneConversation(
             Principal principal,
@@ -91,7 +94,7 @@ public class ConversationServiceImpl implements ConversationService {
         log.info("Membership: {}", membershipStatus);
 
 //        String memberShip_status = membershipStatus.name();
-        List<OneToOneConversationList> oneToOneList = conversationRepository.getOnetoOneConversationList(user.getId(), membershipStatus);
+        List<OneToOneConversationDto> oneToOneList = conversationRepository.getOnetoOneConversationList(user.getId(), membershipStatus);
         oneToOneList.forEach(response -> {
             if(blockService.checkBlockstatus(user.getId(), response.getFriendId()))
                 response.setBlocker(user.getId());
@@ -100,7 +103,7 @@ public class ConversationServiceImpl implements ConversationService {
                     }
         }
                 );
-        List<GroupConversationList> groupList = conversationRepository.getGroupConversationList(user.getId(), membershipStatus);
+        List<GroupConversationDto> groupList = conversationRepository.getGroupConversationList(user.getId(), membershipStatus);
 
         return GetConversationListResponse.builder().
                 oneToOneList(oneToOneList).
@@ -111,11 +114,11 @@ public class ConversationServiceImpl implements ConversationService {
     public Membership changeMembershipStatus(
             Principal principal,
             ChangeMembershipStatusRequest request){
-        log.info("Request: {}", request);
+//        log.info("Request: {}", request);
         User user = userRepository.findByUsername(principal.getName()).orElseThrow();
         Membership membership = membershipRepository.findByConversationIdAndUserId(request.getConversationId(), user.getId() ).orElseThrow();
         membership.setStatus(request.getNewStatus());
-        log.info("Membership: {}", membership);
+//        log.info("Membership: {}", membership);
         return membershipRepository.save(membership);
 
     }
@@ -166,7 +169,7 @@ public class ConversationServiceImpl implements ConversationService {
         Check friend relation with admin
          */
         User user = userRepository.findById(request.getMemberId()).orElseThrow(UserNotFoundException::new);
-
+//        log.info("Added Member: {}", user);
         Membership newMembership = membershipRepository.save(
                 Membership.builder().
                         conversationId(request.getConversationId()).
@@ -179,12 +182,21 @@ public class ConversationServiceImpl implements ConversationService {
         Send notification
          */
 
+        GroupConversationDto newGroup = GroupConversationDto.builder().
+                conversationId(request.getConversationId()).
+                groupName(request.getGroupName()).
+                membershipId(newMembership.getId()).
+                type(Conversation_Type.Group).
+                build();
+        NewGroupNotification notification = NewGroupNotification.builder().newGroup(newGroup).build();
+        messagingTemplate.convertAndSendToUser(
+                user.getId(), "/queue/messages", notification);;
+
         return AddMemberResponse.builder().
                 memberName(user.getName()).
                 memberId(user.getId()).
                 build();
     }
-
 
     public LeaveGroupResponse leaveGroup(
             Principal principal,
@@ -216,6 +228,7 @@ public class ConversationServiceImpl implements ConversationService {
         User admin = userRepository.findByUsername(principal.getName()).orElseThrow(UserNotFoundException::new);
         /*
         Check valid data
+        Check admin role
          */
         try{
             membershipRepository.deleteByConversationIdAndUserId(request.getGroupId(), request.getMemberId());
@@ -225,6 +238,17 @@ public class ConversationServiceImpl implements ConversationService {
         }
 
         return DeleteMemberResponse.builder().status("DELETED").build();
+    }
+
+
+    public List<GetGroupMemberResponse> getMemberList(
+            Principal principal,
+            String conversationId) {
+        /*
+        Check valid data
+         */
+
+        return conversationRepository.getMemberList(conversationId);
     }
 
 

@@ -1,4 +1,4 @@
-package SD.ChatApp.dto.message;
+package SD.ChatApp.dto.websocket.message;
 
 import SD.ChatApp.model.conversation.Message;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.Data;
 public class ChatMessageReceiving {
     private Message message;
 
-    private String receiverId;
+    private String destinationId;
 }
 
 
