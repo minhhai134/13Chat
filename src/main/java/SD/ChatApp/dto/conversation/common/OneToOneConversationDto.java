@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class OneToOneConversationDto {
 
-    private String id;
+    private String conversationId;
 
     private Conversation_Type conversationType;
 
@@ -24,7 +24,7 @@ public class OneToOneConversationDto {
     private Instant friendLastSeen;
 
     public OneToOneConversationDto(String id, Conversation_Type conversationType, Instant conversationLastActive, Instant friendLastSeen, String friendId, String friendName) {
-        this.id = id;
+        this.conversationId = id;
         this.conversationType = conversationType;
         this.conversationLastActive = conversationLastActive;
         this.friendLastSeen = friendLastSeen;

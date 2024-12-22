@@ -13,9 +13,9 @@ import java.time.Instant;
 public class GroupConversationDto {
     private String conversationId;
 
-    private Conversation_Type type;
+    private Conversation_Type conversationType;
 
-    private Instant lastActive;
+    private Instant conversationLastActive;
 
     private Instant lastSeen;
 

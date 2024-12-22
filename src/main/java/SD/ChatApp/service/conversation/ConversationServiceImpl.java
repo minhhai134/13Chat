@@ -187,7 +187,7 @@ public class ConversationServiceImpl implements ConversationService {
                 conversationId(request.getConversationId()).
                 groupName(request.getGroupName()).
                 membershipId(newMembership.getId()).
-                type(Conversation_Type.Group).
+                conversationType(Conversation_Type.Group).
                 build();
         NewGroupNotification notification = NewGroupNotification.builder().newGroup(newGroup).notificationType(Notification_Type.ADDED_TO_A_GROUP).build();
 //        messagingTemplate.convertAndSendToUser(
