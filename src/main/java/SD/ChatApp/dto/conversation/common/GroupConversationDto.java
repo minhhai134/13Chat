@@ -21,6 +21,8 @@ public class GroupConversationDto {
 
     private String membershipId;
 
+    private String adminId;
+
     private String groupName;
 
 }
