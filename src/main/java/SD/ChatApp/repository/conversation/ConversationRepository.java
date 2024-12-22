@@ -35,9 +35,10 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
     @Query(value =
             "select new SD.ChatApp.dto.conversation.common.GroupConversationDto(" +
             "cv.id, cv.type, cv.lastActive, ms.lastSeen, ms.id, mt.groupName) " +
-            "from Conversation cv, Membership ms, GroupMetaData mt " +
-            "where cv.id = ms.conversationId and cv.id = mt.groupId " +
-            "and cv.id in (select ms2.conversationId from Membership ms2 where ms2.userId = :id and ms2.status = :status) " +
+            "from Conversation cv, Membership ms, GroupMetaData mt, User u " +
+            "where cv.id = ms.conversationId and cv.id = mt.groupId and u.id=ms.userId " +
+//            "and cv.id in (select ms2.conversationId from Membership ms2 where ms2.userId = :id and ms2.status = :status) " +
+            "and u.id=:id and ms.status = :status " +
             "and cv.type = 1 " +
             "order by cv.lastActive desc limit 10 ")
     List<GroupConversationDto> getGroupConversationList(

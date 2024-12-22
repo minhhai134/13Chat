@@ -102,7 +102,7 @@ public class UserController {
     public ResponseEntity<RespondAddFriendResponse> responseFriendRequest(
             Principal principal,
             @Valid @RequestBody RespondAddFriendRequest request){
-        friendService.responseFriendRequest(principal, request);
+        friendService.respondFriendRequest(principal, request);
         return ResponseEntity.status(HttpStatus.OK).body(RespondAddFriendResponse.builder().status("ok").build());
     }
 

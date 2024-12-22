@@ -7,4 +7,5 @@ import lombok.Data;
 @Builder
 public class FriendRequestRequest{
     private String receiverId;
+    private String fixBug;
 }

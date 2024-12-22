@@ -20,7 +20,7 @@ public interface FriendService {
 
     FriendRequest sendFriendRequest(Principal principal , FriendRequestRequest request);
 
-    void responseFriendRequest(Principal principal, RespondAddFriendRequest request);
+    void respondFriendRequest(Principal principal, RespondAddFriendRequest request);
 
     void deleteFriendRequest(Principal principal, DeleteFriendRequestRequest request);
 

@@ -16,6 +16,7 @@ import SD.ChatApp.model.conversation.GroupMetaData;
 import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.model.enums.Conversation_Type;
 import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.model.enums.Notification_Type;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.repository.conversation.ConversationRepository;
 import SD.ChatApp.repository.conversation.GroupMetaDataRepository;
@@ -188,9 +189,10 @@ public class ConversationServiceImpl implements ConversationService {
                 membershipId(newMembership.getId()).
                 type(Conversation_Type.Group).
                 build();
-        NewGroupNotification notification = NewGroupNotification.builder().newGroup(newGroup).build();
-        messagingTemplate.convertAndSendToUser(
-                user.getId(), "/queue/messages", notification);;
+        NewGroupNotification notification = NewGroupNotification.builder().newGroup(newGroup).notificationType(Notification_Type.ADDED_TO_A_GROUP).build();
+//        messagingTemplate.convertAndSendToUser(
+//                user.getId(), "/queue/messages", notification);
+        messagingTemplate.convertAndSend("/topic/"+user.getId(), notification);
 
         return AddMemberResponse.builder().
                 memberName(user.getName()).

@@ -6,12 +6,14 @@ import SD.ChatApp.dto.friend.DeleteFriendRequestRequest;
 import SD.ChatApp.dto.friend.FriendRequestRequest;
 import SD.ChatApp.dto.friend.RespondAddFriendRequest;
 import SD.ChatApp.dto.friend.UnfriendRequest;
+import SD.ChatApp.dto.websocket.network.FriendRequestNotification;
 import SD.ChatApp.exception.friend.FriendRelationshipExistedException;
 import SD.ChatApp.exception.friend.FriendRelationshipNotFound;
 import SD.ChatApp.exception.friend.FriendRequestExistedException;
 import SD.ChatApp.exception.request.InvalidRequestException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
+import SD.ChatApp.model.enums.Notification_Type;
 import SD.ChatApp.model.network.Block;
 import SD.ChatApp.model.network.FriendRelation;
 import SD.ChatApp.model.network.FriendRequest;
@@ -20,6 +22,7 @@ import SD.ChatApp.repository.network.FriendRelationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -35,6 +38,8 @@ public class FriendServiceImpl implements FriendService {
     private FriendRequestService friendRequestService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private  SimpMessagingTemplate messagingTemplate;
 
 
     public boolean checkFriendRelationship(String id1, String id2) {
@@ -43,13 +48,13 @@ public class FriendServiceImpl implements FriendService {
         else return false;
     }
 
-    public FriendRelation addFriend(String senderId, String receiverId){
+    private FriendRelation addFriend(String senderId, String receiverId){
         friendRelationRepository.save(FriendRelation.builder().userId(senderId).friendId(receiverId).build());
         return friendRelationRepository.save(FriendRelation.builder().userId(receiverId).friendId(senderId).build());
 
     }
 
-    public void deleteFriendRelationship(String userId, String friendId){
+    private void deleteFriendRelationship(String userId, String friendId){
         if(checkFriendRelationship(userId,friendId)){
             friendRelationRepository.deleteByUserIdAndFriendId(userId,friendId);
             friendRelationRepository.deleteByUserIdAndFriendId(friendId,userId);
@@ -62,6 +67,8 @@ public class FriendServiceImpl implements FriendService {
         User user = userRepository.findByUsername(principal.getName()).orElseThrow();
         String senderId = user.getId();
         String receiverId = request.getReceiverId();
+        User receiver = userRepository.findById(request.getReceiverId())
+                .orElseThrow(UserNotFoundException::new);
 
         if(blockService.checkBlockstatus(senderId, receiverId) || blockService.checkBlockstatus(receiverId, senderId))
             throw new UserNotFoundException();
@@ -74,10 +81,17 @@ public class FriendServiceImpl implements FriendService {
 
         FriendRequest savedRequest = friendRequestService.saveFriendRequest(senderId,receiverId);
 
+        FriendRequestNotification notification = FriendRequestNotification.builder().
+                notificationType(Notification_Type.RECEIVED_FRIEND_REQUEST).
+                senderId(user.getId()).
+                senderName(user.getName()).
+                build();
+        messagingTemplate.convertAndSend("/topic/"+receiver.getId(), notification);
+
         return savedRequest;
     }
 
-    public void responseFriendRequest(Principal principal, RespondAddFriendRequest request){
+    public void respondFriendRequest(Principal principal, RespondAddFriendRequest request){
 
         User user = userRepository.findByUsername(principal.getName()).orElseThrow();
         String receiverId = user.getId();
