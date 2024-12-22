@@ -61,6 +61,7 @@ public class MessageServiceImpl implements MessageService {
         Conversation conversation = conversationRepository.findById(message.getConversationId()).orElseThrow();
         conversation.setLastActive(message.getSentTime());
         conversation.setLastMessageID(savedMesssage.getId());
+        conversation.setLastMessageContent(savedMesssage.getContent());
         conversationRepository.save(conversation);
 
         return savedMesssage;

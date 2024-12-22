@@ -24,6 +24,8 @@ public class Conversation {
 
     private long lastMessageID;
 
+    private String lastMessageContent;
+
     private Instant lastActive;
 
 }
