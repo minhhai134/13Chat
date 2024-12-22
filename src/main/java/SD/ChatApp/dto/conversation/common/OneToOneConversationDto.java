@@ -19,17 +19,20 @@ public class OneToOneConversationDto {
 
     private Instant conversationLastActive;
 
+    private long lastMessageID;
+
 //    private Membership_Status status; Status nay de lam gi vay??
 
     private Instant friendLastSeen;
 
-    public OneToOneConversationDto(String id, Conversation_Type conversationType, Instant conversationLastActive, Instant friendLastSeen, String friendId, String friendName) {
+    public OneToOneConversationDto(String id, Conversation_Type conversationType, Instant conversationLastActive, long lastMessageID, Instant friendLastSeen, String friendId, String friendName) {
         this.conversationId = id;
         this.conversationType = conversationType;
         this.conversationLastActive = conversationLastActive;
         this.friendLastSeen = friendLastSeen;
         this.friendId = friendId;
         this.friendName = friendName;
+        this.lastMessageID = lastMessageID;
     }
 
     private String friendId;

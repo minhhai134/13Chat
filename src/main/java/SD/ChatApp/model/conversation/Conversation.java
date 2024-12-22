@@ -22,6 +22,8 @@ public class Conversation {
 
     private Conversation_Type type;
 
+    private long lastMessageID;
+
     private Instant lastActive;
 
 }

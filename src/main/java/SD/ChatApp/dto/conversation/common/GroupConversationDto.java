@@ -17,6 +17,8 @@ public class GroupConversationDto {
 
     private Instant conversationLastActive;
 
+    private long lastMessageID;
+
     private Instant lastSeen;
 
     private String membershipId;

@@ -56,10 +56,11 @@ public class MessageServiceImpl implements MessageService {
         }
 
         /*
-        Update Conversation's lastActive
+        Update Conversation's lastActive and lastMessageId
          */
         Conversation conversation = conversationRepository.findById(message.getConversationId()).orElseThrow();
         conversation.setLastActive(message.getSentTime());
+        conversation.setLastMessageID(savedMesssage.getId());
         conversationRepository.save(conversation);
 
         return savedMesssage;
