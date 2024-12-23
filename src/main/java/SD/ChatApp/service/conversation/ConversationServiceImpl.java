@@ -47,7 +47,7 @@ public class ConversationServiceImpl implements ConversationService {
             Principal principal,
             CreateOneToOneConversationRequest request){
         User user = userRepository.findByUsername(principal.getName()).orElseThrow();
-        User friend = userRepository.findByUsername(request.getFriendId()).
+        User friend = userRepository.findById(request.getFriendId()).
                 orElseThrow(UserNotFoundException::new);
 
         if(blockService.checkBlockstatus(user.getId(), friend.getId())
