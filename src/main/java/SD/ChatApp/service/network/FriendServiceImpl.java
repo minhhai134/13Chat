@@ -13,7 +13,7 @@ import SD.ChatApp.exception.friend.FriendRequestExistedException;
 import SD.ChatApp.exception.request.InvalidRequestException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
-import SD.ChatApp.model.enums.FRIEND_REQUEST_RESPONSE;
+import SD.ChatApp.model.enums.Friend_Request_Response;
 import SD.ChatApp.model.enums.Notification_Type;
 import SD.ChatApp.model.network.Block;
 import SD.ChatApp.model.network.FriendRelation;
@@ -98,16 +98,16 @@ public class FriendServiceImpl implements FriendService {
         String receiverId = user.getId();
         String senderId = request.getSenderId();
         User sender = userRepository.findById(senderId).orElseThrow(UserNotFoundException::new);
-        FRIEND_REQUEST_RESPONSE response = request.getResponse();
+        Friend_Request_Response response = request.getResponse();
 
         // Handle exceptions:
 
-        if(response==FRIEND_REQUEST_RESPONSE.ACCEPT){
+        if(response== Friend_Request_Response.ACCEPT){
             friendRequestService.deleteFriendRequest(senderId,receiverId);
             addFriend(senderId,receiverId);
 //            return addFriend(senderId,receiverId);
         }
-        else if(response==FRIEND_REQUEST_RESPONSE.REJECT){
+        else if(response== Friend_Request_Response.REJECT){
             friendRequestService.deleteFriendRequest(senderId,receiverId);
 //            return null;
         }

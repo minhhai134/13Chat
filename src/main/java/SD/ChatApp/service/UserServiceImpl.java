@@ -5,7 +5,7 @@ import SD.ChatApp.exception.user.NameExistedException;
 import SD.ChatApp.exception.user.UserNameExistedException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
-import SD.ChatApp.model.enums.Relationship;
+import SD.ChatApp.model.enums.Relationship_Type;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.service.network.BlockService;
 import SD.ChatApp.service.network.FriendRequestService;
@@ -72,17 +72,17 @@ public class UserServiceImpl implements UserService {
         GetUserInfoResponse response = GetUserInfoResponse.builder().
                 userId(foundUser.getId()).
                 name(foundUser.getName()).
-                relationship(Relationship.NONE).
+                relationship(Relationship_Type.NONE).
                 build();
 
         if(friendService.checkFriendRelationship(user.getId(), foundUser.getId())){
-            response.setRelationship(Relationship.FRIEND);
+            response.setRelationship(Relationship_Type.FRIEND);
         }
         else if(friendRequestService.checkFriendRequestSent(user.getId(), foundUser.getId())){
-            response.setRelationship(Relationship.REQUEST_SENT);
+            response.setRelationship(Relationship_Type.REQUEST_SENT);
         }
         else if(friendRequestService.checkFriendRequestSent(foundUser.getId(),user.getId())){
-            response.setRelationship(Relationship.REQUEST_RECEIVED);
+            response.setRelationship(Relationship_Type.REQUEST_RECEIVED);
         }
 
         return response;

@@ -1,6 +1,6 @@
 package SD.ChatApp.dto.friend;
 
-import SD.ChatApp.model.enums.FRIEND_REQUEST_RESPONSE;
+import SD.ChatApp.model.enums.Friend_Request_Response;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,5 +8,5 @@ import lombok.Data;
 @Builder
 public class RespondAddFriendRequest {
     private String senderId;
-    private FRIEND_REQUEST_RESPONSE response;
+    private Friend_Request_Response response;
 }
