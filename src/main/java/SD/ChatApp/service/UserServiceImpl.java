@@ -5,6 +5,7 @@ import SD.ChatApp.exception.user.NameExistedException;
 import SD.ChatApp.exception.user.UserNameExistedException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
+import SD.ChatApp.model.enums.Relationship;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.service.network.BlockService;
 import SD.ChatApp.service.network.FriendRequestService;
@@ -60,8 +61,6 @@ public class UserServiceImpl implements UserService {
 
     public GetUserInfoResponse getUserInfo(Principal userPrincipal, String searchName){
 
-        StringBuilder relationship = new StringBuilder("non-relationship");
-
         User user = userRepository.findByUsername(userPrincipal.getName()).orElseThrow();
 
         User foundUser = userRepository.findByName(searchName)
@@ -70,25 +69,23 @@ public class UserServiceImpl implements UserService {
         if(blockService.checkBlockstatus(user.getId(), foundUser.getId()) || blockService.checkBlockstatus(foundUser.getId(), user.getId()))
             throw new UserNotFoundException();
 
-        if(friendService.checkFriendRelationship(user.getId(), foundUser.getId())){
-            relationship.setLength(0);
-            relationship.append("friend");
-        }
-        else if(friendRequestService.checkFriendRequestSent(user.getId(), foundUser.getId())){
-            relationship.setLength(0);
-            relationship.append("friend-sent");
-        }
-        else if(friendRequestService.checkFriendRequestSent(foundUser.getId(),user.getId())){
-            relationship.setLength(0);
-            relationship.append("pending-friend-request");
-        }
-
-
-        return GetUserInfoResponse.builder().
+        GetUserInfoResponse response = GetUserInfoResponse.builder().
                 userId(foundUser.getId()).
                 name(foundUser.getName()).
-                relationship(relationship.toString()).
+                relationship(Relationship.NONE).
                 build();
+
+        if(friendService.checkFriendRelationship(user.getId(), foundUser.getId())){
+            response.setRelationship(Relationship.FRIEND);
+        }
+        else if(friendRequestService.checkFriendRequestSent(user.getId(), foundUser.getId())){
+            response.setRelationship(Relationship.REQUEST_SENT);
+        }
+        else if(friendRequestService.checkFriendRequestSent(foundUser.getId(),user.getId())){
+            response.setRelationship(Relationship.REQUEST_RECEIVED);
+        }
+
+        return response;
     }
 
     public List<GetFriendRequestListResponse> getFriendRequestList(Principal userPrincipal) {

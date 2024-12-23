@@ -13,6 +13,7 @@ import SD.ChatApp.exception.friend.FriendRequestExistedException;
 import SD.ChatApp.exception.request.InvalidRequestException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
+import SD.ChatApp.model.enums.FRIEND_REQUEST_RESPONSE;
 import SD.ChatApp.model.enums.Notification_Type;
 import SD.ChatApp.model.network.Block;
 import SD.ChatApp.model.network.FriendRelation;
@@ -95,30 +96,29 @@ public class FriendServiceImpl implements FriendService {
 
         User user = userRepository.findByUsername(principal.getName()).orElseThrow();
         String receiverId = user.getId();
-
         String senderId = request.getSenderId();
-        String requestId = request.getRequestId();
-        String response = request.getResponse();
+        User sender = userRepository.findById(senderId).orElseThrow(UserNotFoundException::new);
+        FRIEND_REQUEST_RESPONSE response = request.getResponse();
 
         // Handle exceptions:
 
-        if(response.equals("accept")){
-            friendRequestService.deleteFriendRequest(requestId);
+        if(response==FRIEND_REQUEST_RESPONSE.ACCEPT){
+            friendRequestService.deleteFriendRequest(senderId,receiverId);
             addFriend(senderId,receiverId);
 //            return addFriend(senderId,receiverId);
         }
-        else if(response.equals("reject")){
-            friendRequestService.deleteFriendRequest(requestId);
+        else if(response==FRIEND_REQUEST_RESPONSE.REJECT){
+            friendRequestService.deleteFriendRequest(senderId,receiverId);
 //            return null;
         }
         else throw new InvalidRequestException();
     }
 
     public void deleteFriendRequest(Principal principal, DeleteFriendRequestRequest request){
-
         // Handle exceptions:
-
-        friendRequestService.deleteFriendRequest(request.getRequestId());
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+        User receiver = userRepository.findById(request.getReceiverId()).orElseThrow(UserNotFoundException::new);
+        friendRequestService.deleteFriendRequest(user.getId(), receiver.getId());
     }
 
     /*
@@ -150,10 +150,10 @@ public class FriendServiceImpl implements FriendService {
 
     public void unfriend(Principal principal, UnfriendRequest request) {
         User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+        User friend = userRepository.findById(request.getFriendId()).orElseThrow(UserNotFoundException::new);
 
-        String relationshipId = request.getRelationshipId();
         String userId = user.getId();
-        String friendId = request.getFriendId();
+        String friendId = friend.getId();
 
         // Handle exceptions:
         //...

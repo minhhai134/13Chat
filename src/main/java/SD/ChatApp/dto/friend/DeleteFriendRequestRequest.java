@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class DeleteFriendRequestRequest {
-    private String requestId;
-
     private String receiverId;
+    private String fixBug;
 }

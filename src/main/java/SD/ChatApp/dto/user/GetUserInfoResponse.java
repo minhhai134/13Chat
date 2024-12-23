@@ -1,5 +1,6 @@
 package SD.ChatApp.dto.user;
 
+import SD.ChatApp.model.enums.Relationship;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,5 +11,5 @@ public class GetUserInfoResponse {
 
     private String name;
 
-    private String relationship;
+    private Relationship relationship;
 }

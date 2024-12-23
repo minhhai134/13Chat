@@ -21,8 +21,8 @@ public class FriendRequestServiceImpl implements FriendRequestService {
         return friendRequestRepository.save(FriendRequest.builder().senderId(senderId).receiverId(receiverId).build());
     }
 
-    public void deleteFriendRequest(String requestId) {
-         friendRequestRepository.deleteById(requestId);
+    public void deleteFriendRequest(String senderId, String receiverId) {
+         friendRequestRepository.deleteBySenderIdAndReceiverId(senderId,receiverId);
     }
 
 }

@@ -10,5 +10,5 @@ public interface FriendRequestService {
 
     FriendRequest saveFriendRequest(String senderId, String receiverId);
 
-    void deleteFriendRequest(String requestId);
+    void deleteFriendRequest(String senderId, String receiverId);
 }
