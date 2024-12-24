@@ -69,7 +69,7 @@ public class MessageServiceImpl implements MessageService {
 
     private String checkMessageDestination(User sender, ChatMessageSending message) throws RuntimeException{
         if(message.getConversationType()== Conversation_Type.OneToOne){
-            User receiver = userRepository.findByUsername(message.getDestinationId()).
+            User receiver = userRepository.findById(message.getDestinationId()).
                     orElseThrow(UserNotFoundException::new);
             if(blockService.checkBlockstatus(sender.getId(), receiver.getId())
                     || blockService.checkBlockstatus(receiver.getId(), sender.getId())) {

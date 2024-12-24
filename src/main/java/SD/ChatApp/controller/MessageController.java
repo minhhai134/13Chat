@@ -3,7 +3,10 @@ package SD.ChatApp.controller;
 import SD.ChatApp.dto.websocket.message.ChatMessageReceiving;
 import SD.ChatApp.dto.websocket.message.ChatMessageSending;
 import SD.ChatApp.dto.message.GetMessagesResponse;
+import SD.ChatApp.exception.user.UserNameExistedException;
+import SD.ChatApp.model.User;
 import SD.ChatApp.model.conversation.Message;
+import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.service.conversation.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ import java.util.List;
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final UserRepository userRepository;
 
     @MessageMapping("/one_to_one_chat")
     @SendToUser("/queue/messages")
@@ -35,8 +39,10 @@ public class MessageController {
         ChatMessageReceiving chatMessage = messageService.sendMessage(principal, input);
         // send chat message to topic exchange
         String routingKey = "chat.private." + input.getDestinationId();
+
+        User receiver = userRepository.findById(input.getDestinationId()).orElseThrow(UserNameExistedException::new);
         messagingTemplate.convertAndSendToUser(
-                input.getDestinationId(), "/queue/messages", chatMessage);
+                receiver.getUsername(), "/queue/messages", chatMessage);
         // rabbitTemplate.convertAndSend(MessageQueueConfig.CHAT_EXCHANGE, routingKey,
         // objectMapper.writeValueAsString(chatMessage));
 //        log.info("sent message to chat exchange = {}, routing Key = {}, message = {}",
