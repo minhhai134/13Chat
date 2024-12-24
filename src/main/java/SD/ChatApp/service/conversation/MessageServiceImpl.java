@@ -48,12 +48,12 @@ public class MessageServiceImpl implements MessageService {
         Update Membership_Status if needed
          */
         log.info("Message:{}", message);
-        if(message.getMembershipStatus()==Membership_Status.PENDING){
+//        if(message.getMembershipStatus()==Membership_Status.PENDING){
             Membership membership = membershipRepository.findByConversationIdAndUserId(
                     message.getConversationId(), sender.getId()).orElseThrow();
             membership.setStatus(Membership_Status.ACTIVE);
             membershipRepository.save(membership);
-        }
+//        }
 
         /*
         Update Conversation's lastActive and lastMessageId
