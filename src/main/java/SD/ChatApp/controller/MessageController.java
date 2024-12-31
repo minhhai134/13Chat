@@ -1,5 +1,6 @@
 package SD.ChatApp.controller;
 
+import SD.ChatApp.dto.message.UploadFileMessageResponse;
 import SD.ChatApp.dto.websocket.message.ChatMessageReceiving;
 import SD.ChatApp.dto.websocket.message.ChatMessageSending;
 import SD.ChatApp.dto.message.GetMessagesResponse;
@@ -17,6 +18,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -67,6 +69,18 @@ public class MessageController {
 
         List<Message> list = messageService.getMessages(principal, conversationId, pivotId);
         return ResponseEntity.status(HttpStatus.OK).body(GetMessagesResponse.builder().messages(list).build());
+    }
+
+
+    @PostMapping("/files")
+    public ResponseEntity<UploadFileMessageResponse> sendFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("message") ChatMessageSending message
+            ){
+//        log.info("File:{}" , file);
+        log.info("File message: {} - {}", message, file);
+//        @RequestPart("message") ChatMessageSending message
+        return null;
     }
 
 }
