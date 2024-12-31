@@ -69,5 +69,4 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.OK).body(GetMessagesResponse.builder().messages(list).build());
     }
 
-
 }

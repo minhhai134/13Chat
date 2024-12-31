@@ -169,7 +169,15 @@ public class ConversationServiceImpl implements ConversationService {
         Check already join group
         Check friend relation with admin
          */
-        User user = userRepository.findById(request.getMemberId()).orElseThrow(UserNotFoundException::new);
+        User admin = userRepository.findByUsername(principal.getName()).orElseThrow();
+        User friend = userRepository.findById(request.getMemberId()).
+                orElseThrow(UserNotFoundException::new);
+
+        if(blockService.checkBlockstatus(admin.getId(), friend.getId())
+                || blockService.checkBlockstatus(friend.getId(), admin.getId())) {
+            throw new UserNotFoundException();
+        }
+
 //        log.info("Added Member: {}", user);
         Membership newMembership = membershipRepository.save(
                 Membership.builder().
@@ -192,11 +200,11 @@ public class ConversationServiceImpl implements ConversationService {
         NewGroupNotification notification = NewGroupNotification.builder().newGroup(newGroup).notificationType(Notification_Type.ADDED_TO_A_GROUP).build();
 //        messagingTemplate.convertAndSendToUser(
 //                user.getId(), "/queue/messages", notification);
-        messagingTemplate.convertAndSend("/topic/"+user.getId(), notification);
+        messagingTemplate.convertAndSend("/topic/"+friend.getId(), notification);
 
         return AddMemberResponse.builder().
-                memberName(user.getName()).
-                memberId(user.getId()).
+                memberName(friend.getName()).
+                memberId(friend.getId()).
                 build();
     }
 
