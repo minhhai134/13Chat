@@ -53,4 +53,12 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
                     "and ms.conversationId = :conversationId")
     List<GetGroupMemberResponse> getMemberList(@Param("conversationId") String conversationId);
 
+    @Query(value =
+            "select ms.conversationId from Membership ms, Conversation cv " +
+            "where cv.id = ms.conversationId "+
+            "and ms.conversationId in (select ms2.conversationId from Membership ms2 where ms2.userId=:userId) " +
+            "and ms.userId = :friendId "     +
+            "and cv.type = 0")
+    List<String> checkConversationExisted(String userId, String friendId);
+
 }

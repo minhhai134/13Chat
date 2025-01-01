@@ -9,6 +9,7 @@ import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
 import SD.ChatApp.dto.conversation.common.OneToOneConversationDto;
 import SD.ChatApp.dto.websocket.conversation.NewGroupNotification;
 import SD.ChatApp.exception.conversation.LeaveGroupException;
+import SD.ChatApp.exception.conversation.OneToOneConversationExisted;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.model.conversation.Conversation;
@@ -54,6 +55,15 @@ public class ConversationServiceImpl implements ConversationService {
                 || blockService.checkBlockstatus(friend.getId(), user.getId())) {
             throw new UserNotFoundException();
         }
+
+            if (!conversationRepository.checkConversationExisted(user.getId(), friend.getId()).isEmpty()) {
+                log.info("{}", conversationRepository.checkConversationExisted(user.getId(), friend.getId()));
+                throw new UserNotFoundException();
+            }
+//        } catch (Exception e) {
+//            log.info("Error: {}", e.toString());
+//        }
+
 
         Conversation newConversation = conversationRepository.save(
                 Conversation.builder().
