@@ -5,8 +5,12 @@ import SD.ChatApp.dto.websocket.message.ChatMessageReceiving;
 import SD.ChatApp.dto.websocket.message.ChatMessageSending;
 import SD.ChatApp.dto.message.GetMessagesResponse;
 import SD.ChatApp.exception.user.UserNameExistedException;
+import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.model.conversation.Message;
+import SD.ChatApp.model.enums.Conversation_Type;
+import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.model.enums.Message_Type;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.service.conversation.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -42,7 +47,7 @@ public class MessageController {
         // send chat message to topic exchange
         String routingKey = "chat.private." + input.getDestinationId();
 
-        User receiver = userRepository.findById(input.getDestinationId()).orElseThrow(UserNameExistedException::new);
+        User receiver = userRepository.findById(input.getDestinationId()).orElseThrow(UserNotFoundException::new);
         messagingTemplate.convertAndSendToUser(
                 receiver.getUsername(), "/queue/messages", chatMessage);
         // rabbitTemplate.convertAndSend(MessageQueueConfig.CHAT_EXCHANGE, routingKey,
@@ -56,7 +61,7 @@ public class MessageController {
     @MessageMapping("/group_chat")
     public ChatMessageReceiving sendGroupMessage(Principal principal, ChatMessageSending input) throws JsonProcessingException{
         ChatMessageReceiving chatMessage = messageService.sendMessage(principal, input);
-        messagingTemplate.convertAndSend("/topic/"+input.getDestinationId(), input);
+        messagingTemplate.convertAndSend("/topic/"+input.getDestinationId(), chatMessage);
         return chatMessage;
     }
 
@@ -73,14 +78,36 @@ public class MessageController {
 
 
     @PostMapping("/files")
-    public ResponseEntity<UploadFileMessageResponse> sendFile(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("message") ChatMessageSending message
+    public ResponseEntity<ChatMessageReceiving> sendFile(
+            Principal principal,
+            @RequestPart("file") MultipartFile file,
+            @RequestHeader("conversationId") String conversationId,
+            @RequestHeader("destinationId") String destinationId,
+            @RequestHeader("sentTime") Instant sentTime,
+            @RequestHeader("membershipStatus") Membership_Status membershipStatus,
+            @RequestHeader("conversationType") Conversation_Type conversationType
             ){
-//        log.info("File:{}" , file);
-        log.info("File message: {} - {}", message, file);
-//        @RequestPart("message") ChatMessageSending message
-        return null;
+
+        ChatMessageSending message = ChatMessageSending.builder()
+                .conversationId(conversationId)
+                .destinationId(destinationId)
+                .sentTime(sentTime)
+                .membershipStatus(membershipStatus)
+                .messageType(Message_Type.FILE_MESSAGE)
+                .conversationType(conversationType)
+                .build();
+
+        ChatMessageReceiving chatMessage = messageService.sendFile(principal, message, file);
+        if(message.getConversationType()==Conversation_Type.OneToOne){
+            User receiver = userRepository.findById(destinationId).orElseThrow(UserNotFoundException::new);
+            messagingTemplate.convertAndSendToUser(
+                    receiver.getUsername(), "/queue/messages", chatMessage);
+        }
+        else if(message.getConversationType()==Conversation_Type.Group){
+            messagingTemplate.convertAndSend("/topic/"+destinationId, chatMessage);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(chatMessage);
     }
 
 }

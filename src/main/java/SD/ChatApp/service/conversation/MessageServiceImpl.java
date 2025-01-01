@@ -14,10 +14,12 @@ import SD.ChatApp.repository.conversation.ConversationRepository;
 import SD.ChatApp.repository.conversation.MembershipRepository;
 import SD.ChatApp.repository.conversation.MessageRepository;
 import SD.ChatApp.repository.UserRepository;
+import SD.ChatApp.service.minio.UploadService;
 import SD.ChatApp.service.network.BlockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -32,6 +34,7 @@ public class MessageServiceImpl implements MessageService {
     private final MembershipRepository membershipRepository;
     private final MessageRepository messageRepository;
     private final BlockService blockService;
+    private final UploadService uploadService;
 
     private Message saveMessage(User sender, ChatMessageSending message){
         Message savedMesssage = messageRepository.save(
@@ -81,6 +84,10 @@ public class MessageServiceImpl implements MessageService {
         else if(message.getConversationType()== Conversation_Type.Group){
             Conversation groupConversation = conversationRepository.findById(message.getDestinationId()).
                     orElseThrow(GroupNotFoundException::new);
+
+            membershipRepository.findByConversationIdAndUserId(
+                    message.getConversationId(), sender.getId()).orElseThrow(GroupNotFoundException::new);
+
             return groupConversation.getId();
         }
         else return null;
@@ -90,7 +97,7 @@ public class MessageServiceImpl implements MessageService {
             Principal principal,
             ChatMessageSending message){
 
-        User sender = userRepository.findByUsername(principal.getName()).orElseThrow();
+        User sender = userRepository.findByUsername(principal.getName()).get();
 
 //        User receiver = userRepository.findByUsername(message.getReceiverId()).
 //                orElseThrow(UserNotFoundException::new);
@@ -117,5 +124,32 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getMessages(Principal principal, String conversationId, long pivotId){
 
         return messageRepository.getMessage(conversationId, pivotId);
+    }
+
+    public ChatMessageReceiving sendFile(
+            Principal principal,
+            ChatMessageSending message,
+            MultipartFile file){
+
+        User sender = userRepository.findByUsername(principal.getName()).get();
+
+        String destinationId = checkMessageDestination(sender, message);
+
+        log.info("Message: {}", message);
+        // Handle invalid message:
+
+        /*
+        Existed conversation
+         */
+
+        // Need to CHECK MEMBERSHIP
+        Message savedMesssage = saveMessage(sender, message);
+        String fileName = uploadService.uploadFile(file);
+        savedMesssage.setContent(fileName);
+        messageRepository.save(savedMesssage);
+
+        return ChatMessageReceiving.builder().
+                message(savedMesssage).destinationId(destinationId)
+                .build();
     }
 }
