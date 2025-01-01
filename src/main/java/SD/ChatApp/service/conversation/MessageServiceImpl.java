@@ -145,6 +145,7 @@ public class MessageServiceImpl implements MessageService {
         // Need to CHECK MEMBERSHIP
         Message savedMesssage = saveMessage(sender, message);
         String fileName = uploadService.uploadFile(file);
+        if(file.isEmpty()){ throw new RuntimeException("File uploading error"); }
         savedMesssage.setContent(fileName);
         messageRepository.save(savedMesssage);
 
