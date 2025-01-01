@@ -50,3 +50,8 @@ application:
 #    display-request-duration: true  # Display the request duration
 #  paths-to-match: /api/**     # Only include endpoints matching this path pattern
 #  show-actuator: true
+
+cloudinary:
+  cloud-name: "dofftn6qy"
+  api-key: "524579525171771"
+  api-secret: "N_dM3WmsxxvIPxwzF2ra_qd1iXY"
