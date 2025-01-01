@@ -1,15 +1,12 @@
-package SD.ChatApp.service.minio;
+package SD.ChatApp.service.file;
 
 import com.cloudinary.*;
 import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

@@ -14,7 +14,7 @@ import SD.ChatApp.repository.conversation.ConversationRepository;
 import SD.ChatApp.repository.conversation.MembershipRepository;
 import SD.ChatApp.repository.conversation.MessageRepository;
 import SD.ChatApp.repository.UserRepository;
-import SD.ChatApp.service.minio.UploadService;
+import SD.ChatApp.service.file.UploadService;
 import SD.ChatApp.service.network.BlockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -117,8 +117,9 @@ public class MessageServiceImpl implements MessageService {
         Message savedMesssage = saveMessage(sender, message);
 
         return ChatMessageReceiving.builder().
-                message(savedMesssage).destinationId(destinationId)
-                .build();
+                message(savedMesssage).
+                destinationId(destinationId).
+                build();
     }
 
     public List<Message> getMessages(Principal principal, String conversationId, long pivotId){

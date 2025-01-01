@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "notifications")
@@ -25,4 +28,7 @@ public class Notification {
     private String notificationContent;
 
     private boolean seenStatus;
+
+    @CreationTimestamp
+    private Instant timeStamp;
 }

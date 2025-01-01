@@ -8,6 +8,7 @@ import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationRequest;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
 import SD.ChatApp.dto.conversation.common.OneToOneConversationDto;
 import SD.ChatApp.dto.websocket.conversation.NewGroupNotification;
+import SD.ChatApp.dto.websocket.conversation.NewOneToOneChatNotification;
 import SD.ChatApp.exception.conversation.LeaveGroupException;
 import SD.ChatApp.exception.conversation.OneToOneConversationExisted;
 import SD.ChatApp.exception.user.UserNotFoundException;
@@ -93,6 +94,16 @@ public class ConversationServiceImpl implements ConversationService {
                         build()
         );
         log.info("Friend Membership: {}", friendMembership);
+        /*
+        Send notification
+         */
+        OneToOneConversationDto newConv = conversationRepository.getOnetoOneConversationById(
+                newConversation.getId(), friend.getId()).getFirst();
+        NewOneToOneChatNotification notification = NewOneToOneChatNotification.builder().
+                newConversation(newConv).notificationType(Notification_Type.NEW_CONVERSATION)
+                .build();
+        messagingTemplate.convertAndSendToUser(
+                friend.getUsername(), "/queue/messages", notification);
 
 
         return CreateOneToOneConversationResponse.builder()
@@ -204,14 +215,22 @@ public class ConversationServiceImpl implements ConversationService {
         /*
         Send notification
          */
+        GroupConversationDto newGroup = conversationRepository.getGroupById(
+                request.getConversationId(), request.getMemberId()).getFirst();
+        NewGroupNotification notification = NewGroupNotification.builder().
+                newGroup(newGroup).notificationType(Notification_Type.NEW_CONVERSATION)
+                .build();
+        messagingTemplate.convertAndSendToUser(
+                friend.getUsername(), "/queue/messages", notification);
 
-        Notification notification = Notification.builder().
-                notificationType(Notification_Type.ADDED_TO_A_GROUP).
-                userId(friend.getId()).
-                seenStatus(false).
-                notificationContent("Đã được thêm vào một nhóm mới").
-                build();
-        notificationService.sendNotification(notification, friend);
+//        Notification notification = Notification.builder().
+//                notificationType(Notification_Type.ADDED_TO_A_GROUP).
+//                userId(friend.getId()).
+//                seenStatus(false).
+//                notificationContent("Đã được thêm vào một nhóm mới").
+//                build();
+//        notificationService.sendNotification(notification, friend);
+
 
         return AddMemberResponse.builder().
                 memberName(friend.getName()).
@@ -271,6 +290,8 @@ public class ConversationServiceImpl implements ConversationService {
 
         return conversationRepository.getMemberList(conversationId);
     }
+
+
 
 
 }

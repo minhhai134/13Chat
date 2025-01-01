@@ -1,4 +1,4 @@
-package SD.ChatApp.service.minio;
+package SD.ChatApp.service.file;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

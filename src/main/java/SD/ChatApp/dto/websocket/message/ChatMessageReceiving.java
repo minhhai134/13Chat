@@ -10,6 +10,10 @@ public class ChatMessageReceiving {
     private Message message;
 
     private String destinationId;
+
+//    private String senderName;
+//
+//    private String senderAvt;
 }
 
 
