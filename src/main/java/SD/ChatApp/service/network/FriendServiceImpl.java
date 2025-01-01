@@ -18,8 +18,11 @@ import SD.ChatApp.model.enums.Notification_Type;
 import SD.ChatApp.model.network.Block;
 import SD.ChatApp.model.network.FriendRelation;
 import SD.ChatApp.model.network.FriendRequest;
+import SD.ChatApp.model.notification.Notification;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.repository.network.FriendRelationRepository;
+import SD.ChatApp.repository.notification.NotificationRepository;
+import SD.ChatApp.service.notification.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -41,6 +44,9 @@ public class FriendServiceImpl implements FriendService {
     private UserRepository userRepository;
     @Autowired
     private  SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private NotificationService notificationService;
+
 
 
     public boolean checkFriendRelationship(String id1, String id2) {
@@ -82,12 +88,14 @@ public class FriendServiceImpl implements FriendService {
 
         FriendRequest savedRequest = friendRequestService.saveFriendRequest(senderId,receiverId);
 
-        FriendRequestNotification notification = FriendRequestNotification.builder().
+        Notification notification = Notification.builder().
                 notificationType(Notification_Type.RECEIVED_FRIEND_REQUEST).
-                senderId(user.getId()).
-                senderName(user.getName()).
+                userId(receiver.getId()).
+                seenStatus(false).
+                notificationContent(String.format("%s đã gửi lời mời kết bạn", user.getUsername())).
                 build();
-        messagingTemplate.convertAndSend("/topic/"+receiver.getId(), notification);
+        notificationService.sendNotification(notification, receiver);
+//        messagingTemplate.convertAndSend("/topic/"+receiver.getId(), notification);
 
         return savedRequest;
     }
@@ -105,6 +113,14 @@ public class FriendServiceImpl implements FriendService {
         if(response== Friend_Request_Response.ACCEPT){
             friendRequestService.deleteFriendRequest(senderId,receiverId);
             addFriend(senderId,receiverId);
+
+            Notification notification = Notification.builder().
+                    notificationType(Notification_Type.FRIEND_REQUEST_ACCEPTED).
+                    userId(sender.getId()).
+                    seenStatus(false).
+                    notificationContent(String.format("%s đã chấp nhận lời mời kết bạn", sender.getUsername())).
+                    build();
+            notificationService.sendNotification(notification, sender);
 //            return addFriend(senderId,receiverId);
         }
         else if(response== Friend_Request_Response.REJECT){
