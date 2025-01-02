@@ -8,4 +8,5 @@ import lombok.Data;
 @Builder
 public class RegisterResponse {
     private User user;
+    private String status;
 }

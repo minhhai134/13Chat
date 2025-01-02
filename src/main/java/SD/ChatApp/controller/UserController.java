@@ -34,12 +34,12 @@ public class UserController {
     @Autowired
     private FriendService friendService;
 
-    @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> createUser(
-            @Valid @RequestBody RegisterRequest request){
-        User user = userService.createUser(request);
-        return ResponseEntity.status(HttpStatus.OK).body(RegisterResponse.builder().user(user).build());
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<RegisterResponse> createUser(
+//            @Valid @RequestBody RegisterRequest request){
+//        User user = userService.createUser(request);
+//        return ResponseEntity.status(HttpStatus.OK).body(RegisterResponse.builder().user(user).build());
+//    }
 
     /*
     Đã chỉnh sửa phương thức xác thực
@@ -59,6 +59,9 @@ public class UserController {
     }
 
     //****************************************************************************************
+
+
+
 
     @GetMapping("/info/{searchName}")
     public ResponseEntity<GetUserInfoResponse> getUserInfo(

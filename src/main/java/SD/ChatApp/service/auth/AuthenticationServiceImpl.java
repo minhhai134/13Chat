@@ -6,12 +6,14 @@ import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
@@ -30,6 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String refreshToken = jwtService.generateRefreshToken(user);
 //        revokeAllUserTokens(user);
 //        saveUserToken(user, jwtToken);
+//        log.info("Auth user:{}", user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .refreshToken(refreshToken)

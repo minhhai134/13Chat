@@ -6,7 +6,9 @@ import SD.ChatApp.exception.user.UserNameExistedException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.model.enums.Relationship_Type;
+import SD.ChatApp.model.enums.Role;
 import SD.ChatApp.repository.UserRepository;
+import SD.ChatApp.service.file.UploadService;
 import SD.ChatApp.service.network.BlockService;
 import SD.ChatApp.service.network.FriendRequestService;
 import SD.ChatApp.service.network.FriendService;
@@ -15,6 +17,7 @@ import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -33,20 +36,30 @@ public class UserServiceImpl implements UserService {
     private FriendService friendService;
     @Autowired
     private FriendRequestService friendRequestService;
+    @Autowired
+    private UploadService uploadService;
 
     public User createUser(RegisterRequest request) {
 
+//        log.info("Request: {}", request);
         if(userRepository.findByUsername(request.getUsername()).isPresent())
             throw new UserNameExistedException();
         if(userRepository.findByName(request.getName()).isPresent())
             throw new NameExistedException();
 
+        String avatar = uploadService.uploadFile(request.getAvatar());
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User savedUser = userRepository.save(User.builder().
+                                role(Role.USER).
                                 username(request.getUsername()).
-                                password(request.getPassword()).
+                                password(passwordEncoder.encode(request.getPassword())).
                                 name(request.getName()).
+                                avatar(avatar).
                                 onlineStatus("on").
                                 build());
+//        log.info("Saved User: {}", savedUser);
+
 
         return savedUser;
     }
