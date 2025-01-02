@@ -23,12 +23,12 @@ public interface UserRepository extends JpaRepository<User, String> {
 //    @Query(value = "select rq.id as requestId, u.id as senderId, u.name as senderName " +
 //                   "from User u, FriendRequest rq where u.id = rq.senderId  " +
 //                   "and rq.receiverId = :id")
-    @Query(value = "select new SD.ChatApp.dto.user.GetFriendRequestListResponse(rq.id,u.id,u.name) " +
+    @Query(value = "select new SD.ChatApp.dto.user.GetFriendRequestListResponse(rq.id,u.id,u.name, u.avatar) " +
                    "from User u, FriendRequest rq where u.id = rq.senderId  " +
                    "and rq.receiverId = :id")
     List<GetFriendRequestListResponse> getFriendRequestList(@Param("id") String userId);
 
-    @Query(value = "select new SD.ChatApp.dto.user.GetFriendListResponse(rl.id,u.id,u.name) " +
+    @Query(value = "select new SD.ChatApp.dto.user.GetFriendListResponse(rl.id,u.id,u.name, u.avatar) " +
             "from User u, FriendRelation rl where u.id = rl.friendId  " +
             "and rl.userId = :id")
     List<GetFriendListResponse> getFriendList(@Param("id")String userId);

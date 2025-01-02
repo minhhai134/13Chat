@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
         GetUserInfoResponse response = GetUserInfoResponse.builder().
                 userId(foundUser.getId()).
                 name(foundUser.getName()).
+                userAvt(foundUser.getAvatar()).
                 relationship(Relationship_Type.NONE).
                 build();
 

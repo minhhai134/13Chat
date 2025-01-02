@@ -12,9 +12,12 @@ public class GetFriendRequestListResponse {
 
     private String senderName;
 
-    public GetFriendRequestListResponse(long requestId, String senderId, String senderName) {
+    private String senderAvt;
+
+    public GetFriendRequestListResponse(long requestId, String senderId, String senderName, String senderAvt) {
         this.requestId = requestId;
         this.senderId = senderId;
         this.senderName = senderName;
+        this.senderAvt = senderAvt;
     }
 }

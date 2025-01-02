@@ -11,5 +11,7 @@ public class GetUserInfoResponse {
 
     private String name;
 
+    private String userAvt;
+
     private Relationship_Type relationship;
 }
