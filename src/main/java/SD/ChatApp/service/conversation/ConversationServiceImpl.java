@@ -9,6 +9,7 @@ import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
 import SD.ChatApp.dto.conversation.common.OneToOneConversationDto;
 import SD.ChatApp.dto.websocket.conversation.NewGroupNotification;
 import SD.ChatApp.dto.websocket.conversation.NewOneToOneChatNotification;
+import SD.ChatApp.dto.websocket.conversation.RemovedNotification;
 import SD.ChatApp.exception.conversation.LeaveGroupException;
 import SD.ChatApp.exception.conversation.OneToOneConversationExisted;
 import SD.ChatApp.exception.user.UserNotFoundException;
@@ -266,6 +267,7 @@ public class ConversationServiceImpl implements ConversationService {
             Principal principal,
             DeleteMemberRequest request) {
         User admin = userRepository.findByUsername(principal.getName()).orElseThrow(UserNotFoundException::new);
+        User removedMember = userRepository.findById(request.getMemberId()).orElseThrow(UserNotFoundException::new);
         /*
         Check valid data
         Check admin role
@@ -276,6 +278,13 @@ public class ConversationServiceImpl implements ConversationService {
             log.info("Error: {}", e.getCause());
             throw new LeaveGroupException();
         }
+
+        RemovedNotification notification = RemovedNotification.builder().
+                groupId(request.getGroupId()).notificationType(Notification_Type.REMOVED_FROM_GROUP)
+                .build();
+        messagingTemplate.convertAndSendToUser(
+                removedMember.getUsername(), "/queue/messages", notification);
+
 
         return DeleteMemberResponse.builder().status("DELETED").build();
     }

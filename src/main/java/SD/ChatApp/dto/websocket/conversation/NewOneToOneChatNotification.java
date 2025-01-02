@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 @Builder
 public class NewOneToOneChatNotification {
-    private Notification_Type notificationType;
+    private final Notification_Type notificationType;
     private OneToOneConversationDto newConversation;
 }
