@@ -7,4 +7,5 @@ import lombok.Data;
 @Builder
 public class BlockRequest {
     private String destinationUserId;
+    private String fixBug;
 }
