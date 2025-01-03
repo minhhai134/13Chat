@@ -44,6 +44,8 @@ public class MessageController {
         log.info("got input {}", input);
 
         ChatMessageReceiving chatMessage = messageService.sendMessage(principal, input);
+        if(chatMessage==null) return null;
+
         // send chat message to topic exchange
         String routingKey = "chat.private." + input.getDestinationId();
 
@@ -61,6 +63,8 @@ public class MessageController {
     @MessageMapping("/group_chat")
     public ChatMessageReceiving sendGroupMessage(Principal principal, ChatMessageSending input) throws JsonProcessingException{
         ChatMessageReceiving chatMessage = messageService.sendMessage(principal, input);
+        if(chatMessage==null) return null;
+
         messagingTemplate.convertAndSend("/topic/"+input.getDestinationId(), chatMessage);
         return chatMessage;
     }
@@ -98,6 +102,8 @@ public class MessageController {
                 .build();
 
         ChatMessageReceiving chatMessage = messageService.sendFile(principal, message, file);
+        if(chatMessage==null) return null;
+
         if(message.getConversationType()==Conversation_Type.OneToOne){
             User receiver = userRepository.findById(destinationId).orElseThrow(UserNotFoundException::new);
             messagingTemplate.convertAndSendToUser(

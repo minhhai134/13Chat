@@ -102,7 +102,7 @@ public class MessageServiceImpl implements MessageService {
 //        User receiver = userRepository.findByUsername(message.getReceiverId()).
 //                orElseThrow(UserNotFoundException::new);
         String destinationId = checkMessageDestination(sender, message);
-
+        if(destinationId==null) return null;
         log.info("Message: {}", message);
 
 
