@@ -26,6 +26,7 @@ import SD.ChatApp.repository.conversation.ConversationRepository;
 import SD.ChatApp.repository.conversation.GroupMetaDataRepository;
 import SD.ChatApp.repository.conversation.MembershipRepository;
 import SD.ChatApp.service.network.BlockService;
+import SD.ChatApp.service.network.FriendServiceImpl;
 import SD.ChatApp.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,7 @@ public class ConversationServiceImpl implements ConversationService {
     private final MembershipRepository membershipRepository;
     private final GroupMetaDataRepository groupMetaDataRepository;
     private final SimpMessagingTemplate messagingTemplate;
+    private final FriendServiceImpl friendService;
     private final NotificationService notificationService;
 
     public CreateOneToOneConversationResponse createOneToOneConversation(
@@ -87,13 +89,17 @@ public class ConversationServiceImpl implements ConversationService {
                         build()
         );
 
-        Membership friendMembership = membershipRepository.save(
-                Membership.builder().
+        Membership friendMembership = Membership.builder().
                         conversationId(newConversation.getId()).
                         userId(friend.getId()).
                         status(Membership_Status.PENDING).
-                        build()
-        );
+                        build();
+
+        if(friendService.checkFriendRelationship(user.getId(), friend.getId())){
+            friendMembership.setStatus(Membership_Status.ACTIVE);
+        }
+
+        membershipRepository.save(friendMembership);
         log.info("Friend Membership: {}", friendMembership);
         /*
         Send notification
@@ -204,14 +210,19 @@ public class ConversationServiceImpl implements ConversationService {
             throw new UserNotFoundException();
         }
 
-//        log.info("Added Member: {}", user);
-        Membership newMembership = membershipRepository.save(
-                Membership.builder().
+        Membership newMembership = Membership.builder().
                         conversationId(request.getConversationId()).
                         userId(request.getMemberId()).
                         status(Membership_Status.PENDING).
-                        build()
-        );
+                        build();
+
+        if(friendService.checkFriendRelationship(admin.getId(), friend.getId())){
+            newMembership.setStatus(Membership_Status.ACTIVE);
+        }
+        Membership savedMembership = membershipRepository.save(newMembership);
+
+//        log.info("Added Member: {}", user);
+
 
         /*
         Send notification
