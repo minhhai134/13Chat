@@ -17,7 +17,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
 
     @Query(value =
             "select new SD.ChatApp.dto.conversation.common.OneToOneConversationDto(" +
-                    "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, u.id, u.name, u.avatar) " +
+                    "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, u.id, u.name, u.avatar, ms.status) " +
                     "from Conversation cv, Membership ms, User u " +
                     "where cv.id = ms.conversationId and u.id = ms.userId " +
                     "and ms.id not in (select ms2.id from Membership ms2 " +
@@ -33,7 +33,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
 
     @Query(value =
             "select new SD.ChatApp.dto.conversation.common.OneToOneConversationDto(" +
-                    "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, u.id, u.name,  u.avatar) " +
+                    "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, u.id, u.name,  u.avatar, ms.status) " +
                     "from Conversation cv, Membership ms, User u " +
                     "where cv.id = ms.conversationId and u.id = ms.userId " +
                     "and cv.id = :id and u.id <> :userId ") // +
@@ -49,7 +49,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
 
     @Query(value =
             "select new SD.ChatApp.dto.conversation.common.GroupConversationDto(" +
-            "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, ms.id, mt.adminId, mt.groupName) " +
+            "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, ms.id, mt.adminId, mt.groupName, ms.status) " +
             "from Conversation cv, Membership ms, GroupMetaData mt, User u " +
             "where cv.id = ms.conversationId and cv.id = mt.groupId and u.id=ms.userId " +
 //            "and cv.id in (select ms2.conversationId from Membership ms2 where ms2.userId = :id and ms2.status = :status) " +
@@ -63,7 +63,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
 
     @Query(value =
             "select new SD.ChatApp.dto.conversation.common.GroupConversationDto(" +
-                    "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, ms.id, mt.adminId, mt.groupName) " +
+                    "cv.id, cv.type, cv.lastActive, cv.lastMessageID, cv.lastMessageContent, ms.lastSeen, ms.id, mt.adminId, mt.groupName, ms.status) " +
                     "from Conversation cv, Membership ms, GroupMetaData mt, User u " +
                     "where cv.id = ms.conversationId and cv.id = mt.groupId and u.id=ms.userId " +
                     "and cv.id = :id  " +
