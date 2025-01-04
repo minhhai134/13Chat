@@ -10,5 +10,5 @@ import lombok.Data;
 @Builder
 public class NewGroupNotification {
     private final Notification_Type notificationType;
-    private GroupConversationDto newGroup;
+    private GroupConversationDto newConversation;
 }

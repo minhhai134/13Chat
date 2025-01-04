@@ -231,7 +231,7 @@ public class ConversationServiceImpl implements ConversationService {
         GroupConversationDto newGroup = conversationRepository.getGroupById(
                 request.getConversationId(), request.getMemberId()).getFirst();
         NewGroupNotification notification = NewGroupNotification.builder().
-                newGroup(newGroup).notificationType(Notification_Type.NEW_CONVERSATION)
+                newConversation(newGroup).notificationType(Notification_Type.NEW_CONVERSATION)
                 .build();
         messagingTemplate.convertAndSendToUser(
                 friend.getUsername(), "/queue/messages", notification);
