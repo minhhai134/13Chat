@@ -28,7 +28,7 @@ public class OneToOneConversationDto {
 
     private Instant friendLastSeen;
 
-    public OneToOneConversationDto(String id, Conversation_Type conversationType, Instant conversationLastActive, long lastMessageID, String lastMessageContent, Instant friendLastSeen, String friendId, String friendName, String friendAvt, Membership_Status membershipStatus) {
+    public OneToOneConversationDto(String id, Conversation_Type conversationType, Instant conversationLastActive, long lastMessageID, String lastMessageContent, Instant friendLastSeen, String friendId, String friendName, String friendAvt) {
         this.conversationId = id;
         this.conversationType = conversationType;
         this.conversationLastActive = conversationLastActive;
@@ -38,7 +38,7 @@ public class OneToOneConversationDto {
         this.lastMessageID = lastMessageID;
         this.lastMessageContent = lastMessageContent;
         this.friendAvt = friendAvt;
-        this.membershipStatus = membershipStatus;
+//        this.membershipStatus = membershipStatus;
     }
 
     public OneToOneConversationDto(String id, Conversation_Type conversationType, Instant conversationLastActive, long lastMessageID, String lastMessageContent, Instant friendLastSeen, String friendId, String friendName) {

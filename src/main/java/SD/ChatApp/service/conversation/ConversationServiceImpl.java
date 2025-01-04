@@ -106,6 +106,7 @@ public class ConversationServiceImpl implements ConversationService {
          */
         OneToOneConversationDto newConv = conversationRepository.getOnetoOneConversationById(
                 newConversation.getId(), friend.getId()).getFirst();
+        newConv.setMembershipStatus(friendMembership.getStatus());
         NewOneToOneChatNotification notification = NewOneToOneChatNotification.builder().
                 newConversation(newConv).notificationType(Notification_Type.NEW_CONVERSATION)
                 .build();

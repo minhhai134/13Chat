@@ -71,6 +71,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     private String checkMessageDestination(User sender, ChatMessageSending message) throws RuntimeException{
+        log.info("Check destination: {}", message);
         if(message.getConversationType()== Conversation_Type.OneToOne){
             User receiver = userRepository.findById(message.getDestinationId()).
                     orElseThrow(UserNotFoundException::new);
@@ -78,6 +79,7 @@ public class MessageServiceImpl implements MessageService {
                     || blockService.checkBlockstatus(receiver.getId(), sender.getId())) {
                 throw new UserNotFoundException();
             }
+            log.info("Destination: {}", receiver.getId());
             return receiver.getId();
 
         }
@@ -96,14 +98,14 @@ public class MessageServiceImpl implements MessageService {
     public ChatMessageReceiving sendMessage(
             Principal principal,
             ChatMessageSending message){
-
+//        log.info("Sender: {}", principal);
         User sender = userRepository.findByUsername(principal.getName()).get();
 
 //        User receiver = userRepository.findByUsername(message.getReceiverId()).
 //                orElseThrow(UserNotFoundException::new);
         String destinationId = checkMessageDestination(sender, message);
         if(destinationId==null) return null;
-        log.info("Message: {}", message);
+//        log.info("Message: {}", message);
 
 
         // Handle invalid message:
