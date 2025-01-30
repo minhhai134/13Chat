@@ -1,8 +1,8 @@
 package SD.ChatApp.dto.websocket.message;
 
-import SD.ChatApp.model.enums.Conversation_Type;
-import SD.ChatApp.model.enums.Membership_Status;
-import SD.ChatApp.model.enums.Message_Type;
+import SD.ChatApp.enums.Conversation_Type;
+import SD.ChatApp.enums.Membership_Status;
+import SD.ChatApp.enums.Message_Type;
 import lombok.Builder;
 import lombok.Data;
 import java.time.Instant;

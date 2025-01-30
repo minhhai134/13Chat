@@ -11,8 +11,6 @@ import java.util.List;
 public interface UserService {
     User createUser(RegisterRequest request);
 
-    User login(LoginRequest request);
-
     GetUserInfoResponse getUserInfo(Principal userPrincipal, String searchName);
 
     List<GetFriendRequestListResponse> getFriendRequestList(Principal userPrincipal);

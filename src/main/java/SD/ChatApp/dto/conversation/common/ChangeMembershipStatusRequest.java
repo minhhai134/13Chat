@@ -1,6 +1,6 @@
 package SD.ChatApp.dto.conversation.common;
 
-import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.enums.Membership_Status;
 import lombok.Builder;
 import lombok.Data;
 

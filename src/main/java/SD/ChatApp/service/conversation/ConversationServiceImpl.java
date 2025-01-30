@@ -11,16 +11,14 @@ import SD.ChatApp.dto.websocket.conversation.NewGroupNotification;
 import SD.ChatApp.dto.websocket.conversation.NewOneToOneChatNotification;
 import SD.ChatApp.dto.websocket.conversation.RemovedNotification;
 import SD.ChatApp.exception.conversation.LeaveGroupException;
-import SD.ChatApp.exception.conversation.OneToOneConversationExisted;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.model.conversation.Conversation;
 import SD.ChatApp.model.conversation.GroupMetaData;
 import SD.ChatApp.model.conversation.Membership;
-import SD.ChatApp.model.enums.Conversation_Type;
-import SD.ChatApp.model.enums.Membership_Status;
-import SD.ChatApp.model.enums.Notification_Type;
-import SD.ChatApp.model.notification.Notification;
+import SD.ChatApp.enums.Conversation_Type;
+import SD.ChatApp.enums.Membership_Status;
+import SD.ChatApp.enums.Notification_Type;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.repository.conversation.ConversationRepository;
 import SD.ChatApp.repository.conversation.GroupMetaDataRepository;
@@ -30,7 +28,6 @@ import SD.ChatApp.service.network.FriendServiceImpl;
 import SD.ChatApp.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +47,6 @@ public class ConversationServiceImpl implements ConversationService {
     private final GroupMetaDataRepository groupMetaDataRepository;
     private final SimpMessagingTemplate messagingTemplate;
     private final FriendServiceImpl friendService;
-    private final NotificationService notificationService;
 
     public CreateOneToOneConversationResponse createOneToOneConversation(
             Principal principal,

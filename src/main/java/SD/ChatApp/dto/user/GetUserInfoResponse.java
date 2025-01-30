@@ -1,6 +1,6 @@
 package SD.ChatApp.dto.user;
 
-import SD.ChatApp.model.enums.Relationship_Type;
+import SD.ChatApp.enums.Relationship_Type;
 import lombok.Builder;
 import lombok.Data;
 

@@ -7,6 +7,5 @@ import lombok.Data;
 @Builder
 public class UnblockRequest {
     private String blockId;
-
     private String destinationUserId;
 }

@@ -1,6 +1,6 @@
 package SD.ChatApp.model.conversation;
 
-import SD.ChatApp.model.enums.Conversation_Type;
+import SD.ChatApp.enums.Conversation_Type;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;

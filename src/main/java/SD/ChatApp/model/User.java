@@ -1,7 +1,7 @@
 package SD.ChatApp.model;
 
 
-import SD.ChatApp.model.enums.Role;
+import SD.ChatApp.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

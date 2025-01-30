@@ -1,7 +1,7 @@
 package SD.ChatApp;
 
 import SD.ChatApp.model.User;
-import SD.ChatApp.model.enums.Role;
+import SD.ChatApp.enums.Role;
 import SD.ChatApp.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

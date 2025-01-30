@@ -5,8 +5,8 @@ import SD.ChatApp.exception.user.NameExistedException;
 import SD.ChatApp.exception.user.UserNameExistedException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
-import SD.ChatApp.model.enums.Relationship_Type;
-import SD.ChatApp.model.enums.Role;
+import SD.ChatApp.enums.Relationship_Type;
+import SD.ChatApp.enums.Role;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.service.file.UploadService;
 import SD.ChatApp.service.network.BlockService;
@@ -62,14 +62,6 @@ public class UserServiceImpl implements UserService {
 
 
         return savedUser;
-    }
-
-    public User login(LoginRequest request) {
-        log.info("abc");
-        User user = userRepository.findByUsernameAndPassword(request.getUsername(), request.getPassword())
-                    .orElseThrow(UserNotFoundException::new);
-        log.info("User login: {}", user);
-        return user;
     }
 
     public GetUserInfoResponse getUserInfo(Principal userPrincipal, String searchName){

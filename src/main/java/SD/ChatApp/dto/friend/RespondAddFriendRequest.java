@@ -1,6 +1,6 @@
 package SD.ChatApp.dto.friend;
 
-import SD.ChatApp.model.enums.Friend_Request_Response;
+import SD.ChatApp.enums.Friend_Request_Response;
 import lombok.Builder;
 import lombok.Data;
 

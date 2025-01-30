@@ -1,8 +1,7 @@
 package SD.ChatApp.service.conversation;
 
 import SD.ChatApp.model.conversation.Message;
-import SD.ChatApp.model.enums.Message_Type;
-import SD.ChatApp.service.conversation.MessageServiceImpl;
+import SD.ChatApp.enums.Message_Type;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,14 +20,9 @@ import static org.mockito.Mockito.*;
 
 import SD.ChatApp.dto.websocket.message.ChatMessageReceiving;
 import SD.ChatApp.dto.websocket.message.ChatMessageSending;
-import SD.ChatApp.exception.conversation.GroupNotFoundException;
-import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.model.conversation.Conversation;
-import SD.ChatApp.model.conversation.Membership;
-import SD.ChatApp.model.conversation.Message;
-import SD.ChatApp.model.enums.Conversation_Type;
-import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.enums.Conversation_Type;
 import SD.ChatApp.repository.conversation.ConversationRepository;
 import SD.ChatApp.repository.conversation.MembershipRepository;
 import SD.ChatApp.repository.conversation.MessageRepository;

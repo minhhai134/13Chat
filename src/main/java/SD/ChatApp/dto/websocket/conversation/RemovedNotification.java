@@ -1,6 +1,6 @@
 package SD.ChatApp.dto.websocket.conversation;
 
-import SD.ChatApp.model.enums.Notification_Type;
+import SD.ChatApp.enums.Notification_Type;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,16 +1,14 @@
 package SD.ChatApp.controller;
 
-import SD.ChatApp.dto.message.UploadFileMessageResponse;
 import SD.ChatApp.dto.websocket.message.ChatMessageReceiving;
 import SD.ChatApp.dto.websocket.message.ChatMessageSending;
 import SD.ChatApp.dto.message.GetMessagesResponse;
-import SD.ChatApp.exception.user.UserNameExistedException;
 import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.model.conversation.Message;
-import SD.ChatApp.model.enums.Conversation_Type;
-import SD.ChatApp.model.enums.Membership_Status;
-import SD.ChatApp.model.enums.Message_Type;
+import SD.ChatApp.enums.Conversation_Type;
+import SD.ChatApp.enums.Membership_Status;
+import SD.ChatApp.enums.Message_Type;
 import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.service.conversation.MessageService;
 import lombok.RequiredArgsConstructor;

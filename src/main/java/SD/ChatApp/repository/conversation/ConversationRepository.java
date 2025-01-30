@@ -4,7 +4,7 @@ import SD.ChatApp.dto.conversation.common.GroupConversationDto;
 import SD.ChatApp.dto.conversation.common.OneToOneConversationDto;
 import SD.ChatApp.dto.conversation.group.GetGroupMemberResponse;
 import SD.ChatApp.model.conversation.Conversation;
-import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.enums.Membership_Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

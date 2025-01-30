@@ -1,4 +1,4 @@
-package SD.ChatApp.model.enums;
+package SD.ChatApp.enums;
 
 public enum Message_Type {
     TEXT_MESSAGE,

@@ -34,22 +34,6 @@ public class UserController {
     @Autowired
     private FriendService friendService;
 
-//    @PostMapping("/register")
-//    public ResponseEntity<RegisterResponse> createUser(
-//            @Valid @RequestBody RegisterRequest request){
-//        User user = userService.createUser(request);
-//        return ResponseEntity.status(HttpStatus.OK).body(RegisterResponse.builder().user(user).build());
-//    }
-
-    /*
-    Đã chỉnh sửa phương thức xác thực
-     */
-//    @PostMapping("/login")
-//    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
-//        User user = userService.login(request);
-//        log.info("User login: {}", user);
-//        return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().user(user).build());
-//    }
 
     @GetMapping("/principal")
     public ResponseEntity<Principal> getPrincipal(Principal principal){
@@ -59,8 +43,6 @@ public class UserController {
     }
 
     //****************************************************************************************
-
-
 
 
     @GetMapping("/info/{searchName}")

@@ -1,4 +1,4 @@
-package SD.ChatApp.model.enums;
+package SD.ChatApp.enums;
 
 public enum Relationship_Type {
     FRIEND,

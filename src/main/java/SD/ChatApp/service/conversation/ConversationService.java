@@ -6,7 +6,7 @@ import SD.ChatApp.dto.conversation.group.*;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationRequest;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
 import SD.ChatApp.model.conversation.Membership;
-import SD.ChatApp.model.enums.Membership_Status;
+import SD.ChatApp.enums.Membership_Status;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;

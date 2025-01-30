@@ -1,6 +1,6 @@
 package SD.ChatApp.model.notification;
 
-import SD.ChatApp.model.enums.Notification_Type;
+import SD.ChatApp.enums.Notification_Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

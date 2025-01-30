@@ -1,7 +1,7 @@
 package SD.ChatApp.model.conversation;
 
-import SD.ChatApp.model.enums.Message_Status;
-import SD.ChatApp.model.enums.Message_Type;
+import SD.ChatApp.enums.Message_Status;
+import SD.ChatApp.enums.Message_Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
