@@ -1,6 +1,7 @@
 package SD.ChatApp.model;
 
 
+import SD.ChatApp.enums.AuthProvider;
 import SD.ChatApp.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,10 +11,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "user_")
@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,11 +39,14 @@ public class User implements UserDetails {
 
     private String avatar;
 
-//    @Override
-//    public String getUsername() {
-//        return id;
-//    }
+    private String authProvider;
 
+    private String providerId;
+
+//    @Override
+//    public Map<String, Object> getAttributes() {
+//        return Map.of();
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -52,6 +55,9 @@ public class User implements UserDetails {
         return authorities;
     }
 
+
+
+    //************************************************************************************
     @Override
     public boolean isAccountNonExpired() {
 //        return UserDetails.super.isAccountNonExpired();

@@ -2,6 +2,9 @@ package SD.ChatApp.config;
 
 import SD.ChatApp.filter.JwtAuthenticationFilter;
 import SD.ChatApp.enums.Role;
+import SD.ChatApp.service.auth.JwtService;
+import SD.ChatApp.service.auth.OAuth2UserService;
+import SD.ChatApp.service.auth.OAuthLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -45,6 +49,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
+    private final OAuth2UserService oAuth2UserService;
+    private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -56,6 +62,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/**").hasRole(Role.USER.name())
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(infoEndpoint -> infoEndpoint.userService(oAuth2UserService))
+                        .successHandler(oAuthLoginSuccessHandler))
+//                .oauth2Login(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

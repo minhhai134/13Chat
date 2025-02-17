@@ -1,6 +1,9 @@
 server:
   port: 8081
 
+
+
+
 spring:
 
   datasource:
@@ -29,6 +32,22 @@ spring:
         login: guest
         passcode: guest
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 126264957196-hudervnfdsr05he83ei7g0kguo5thq31.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - profile
+              - email
+#            redirect-uri: "localhost:8081/login/oauth2/code/google"
+          github:
+            client-id: Ov23liggGmJRWdWzMbBq
+            client-secret: b5be760b41d988f4e729affb4aed4671e8837bc5
+            scope: read:user, user:email
+            redirect-uri: "{baseUrl}/login/oauth2/code/github"
 
 application:
   security:
@@ -37,6 +56,7 @@ application:
       expiration: 86400000
       refresh-token:
         expiration: 604800000
+
 
 #springdoc:
 #  api-docs:
