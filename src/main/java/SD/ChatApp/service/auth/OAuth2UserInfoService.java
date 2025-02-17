@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OAuth2UserService extends DefaultOAuth2UserService {
+public class OAuth2UserInfoService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final String GOOGLE_AUTH_PROVIDER = "google";

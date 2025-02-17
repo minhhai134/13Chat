@@ -3,7 +3,7 @@ package SD.ChatApp.config;
 import SD.ChatApp.filter.JwtAuthenticationFilter;
 import SD.ChatApp.enums.Role;
 import SD.ChatApp.service.auth.JwtService;
-import SD.ChatApp.service.auth.OAuth2UserService;
+import SD.ChatApp.service.auth.OAuth2UserInfoService;
 import SD.ChatApp.service.auth.OAuthLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +49,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
-    private final OAuth2UserService oAuth2UserService;
+    private final OAuth2UserInfoService oAuth2UserInfoService;
     private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
 
     @Bean
@@ -63,7 +63,7 @@ public class SecurityConfig {
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(infoEndpoint -> infoEndpoint.userService(oAuth2UserService))
+                        .userInfoEndpoint(infoEndpoint -> infoEndpoint.userService(oAuth2UserInfoService))
                         .successHandler(oAuthLoginSuccessHandler))
 //                .oauth2Login(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
