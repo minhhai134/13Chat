@@ -32,6 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
          @NonNull HttpServletResponse response,
          @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+//        log.info("JWT filter: {}", request.getSession().getId());
+
         if (request.getServletPath().contains("/api/auth") || request.getHeader("Authorization") == null ) {
             filterChain.doFilter(request, response);
             return;
@@ -61,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                log.info("authToken: {}", authToken);
+//                log.info("authToken: {}", authToken);
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
