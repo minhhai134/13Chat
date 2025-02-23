@@ -3,7 +3,7 @@ package SD.ChatApp.config;
 import SD.ChatApp.filter.JwtAuthenticationFilter;
 import SD.ChatApp.enums.Role;
 import SD.ChatApp.service.auth.CustomStatelessOAuth2AuthorizationRequestRepository;
-import SD.ChatApp.service.auth.CustomStatelessOAuth2AuthorizationRequestRepository2;
+import SD.ChatApp.service.auth.SessionBasedOAuth2AuthorizationRequestRepository;
 import SD.ChatApp.service.auth.OAuth2UserInfoService;
 import SD.ChatApp.service.auth.OAuthLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class SecurityConfig {
     private final LogoutHandler logoutHandler;
     private final OAuth2UserInfoService oAuth2UserInfoService;
     private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
-    private final CustomStatelessOAuth2AuthorizationRequestRepository2 statelessOAuth2AuthorizationRequestRepository2;
+    private final SessionBasedOAuth2AuthorizationRequestRepository statelessOAuth2AuthorizationRequestRepository2;
     private final CustomStatelessOAuth2AuthorizationRequestRepository statelessOAuth2AuthorizationRequestRepository;
 
     @Bean
@@ -66,7 +66,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(infoEndpoint -> infoEndpoint.userService(oAuth2UserInfoService))
-//                        .successHandler(oAuthLoginSuccessHandler)
+                        .successHandler(oAuthLoginSuccessHandler)
                         .authorizationEndpoint(config -> config.authorizationRequestRepository(statelessOAuth2AuthorizationRequestRepository) ))
 //                .oauth2Login(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

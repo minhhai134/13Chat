@@ -5,6 +5,7 @@ import SD.ChatApp.exception.user.UserNotFoundException;
 import SD.ChatApp.model.User;
 import SD.ChatApp.repository.UserRepository;
 import io.minio.credentials.Jwt;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +35,17 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
 
         // Generate JWT token
         User user = userRepository.findByUsername(((UserPrincipal) authentication.getPrincipal()).getUsername()).orElseThrow(UserNotFoundException::new);
-        log.info("Success Handler: {}", user);
+//        log.info("Success Handler: {}", user);
         String token = jwtService.generateToken(user);
-
+        Cookie jwtCookie = new Cookie("JWT", token);
+        jwtCookie.setHttpOnly(false);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(10);
+        response.addCookie(jwtCookie);
         // Redirect to front-end with token
 //        response.sendRedirect(REDIRECT_URL + token);
-        response.sendRedirect("http://localhost:5173/login");
-
+        response.sendRedirect("http://localhost:5173/OAuthLogin");
+        
 
 
     }

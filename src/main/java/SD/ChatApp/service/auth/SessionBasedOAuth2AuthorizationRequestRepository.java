@@ -11,9 +11,10 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+
 @Component
 @Slf4j
-public class CustomStatelessOAuth2AuthorizationRequestRepository2 implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
+public class SessionBasedOAuth2AuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>  {
     private static final String DEFAULT_AUTHORIZATION_REQUEST_ATTR_NAME = HttpSessionOAuth2AuthorizationRequestRepository.class
             .getName() + ".AUTHORIZATION_REQUEST";
 
