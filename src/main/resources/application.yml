@@ -1,9 +1,6 @@
 server:
   port: 8081
 
-
-
-
 spring:
 
   datasource:
@@ -11,6 +8,7 @@ spring:
     username: postgres
     password: damminhhai
     driver-class-name: org.postgresql.Driver
+
 #     url: 'jdbc:mysql://localhost:3306/chatapp'
 #     username: root
 #     password:
@@ -57,7 +55,6 @@ application:
       refresh-token:
         expiration: 604800000
 
-
 #springdoc:
 #  api-docs:
 #    path: /api-docs          # Custom path for API documentation JSON
@@ -75,3 +72,26 @@ cloudinary:
   cloud-name: "dofftn6qy"
   api-key: "524579525171771"
   api-secret: "N_dM3WmsxxvIPxwzF2ra_qd1iXY"
+
+
+---
+spring.config.activate.on-profile: local
+---
+spring.config.activate.on-profile: docker-compose
+spring:
+  datasource:
+#    url: 'jdbc:postgresql://postgres:5432/app'
+    url: 'jdbc:mysql://mysql:3306/app'
+    username: app
+    password: app
+#    driver-class-name: org.postgresql.Driver
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    stomp:
+      relay:
+        host: rabbitmq
+        port: 61613
+        login: guest
+        passcode: guest

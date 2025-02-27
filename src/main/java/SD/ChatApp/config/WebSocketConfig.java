@@ -60,6 +60,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("http://localhost:5173","http://localhost:8080");
+//        log.info("HOST: {}", relayHost );
     }
 
     /*
