@@ -5,4 +5,5 @@ public enum Notification_Type {
     RECEIVED_FRIEND_REQUEST,
     FRIEND_REQUEST_ACCEPTED,
     REMOVED_FROM_GROUP,
+    INCOMING_CALL
 }

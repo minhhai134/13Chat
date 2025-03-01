@@ -1,14 +1,14 @@
 package SD.ChatApp.controller;
 
-import SD.ChatApp.dto.conversation.common.ChangeMembershipStatusRequest;
-import SD.ChatApp.dto.conversation.common.ChangeMembershipStatusResponse;
-import SD.ChatApp.dto.conversation.common.GetConversationListResponse;
+import SD.ChatApp.dto.conversation.common.*;
 import SD.ChatApp.dto.conversation.group.*;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationRequest;
 import SD.ChatApp.dto.conversation.onetoone.CreateOneToOneConversationResponse;
 import SD.ChatApp.model.conversation.Membership;
 import SD.ChatApp.enums.Membership_Status;
 import SD.ChatApp.service.conversation.ConversationService;
+import SD.ChatApp.service.videocall.VideoCallService;
+import io.getstream.exceptions.StreamException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +29,7 @@ import java.util.List;
 public class ConversationController {
 
     private final ConversationService conversationService;
+    private final VideoCallService videoCallService;
 
     @PostMapping("/new")
     public ResponseEntity<CreateOneToOneConversationResponse> createOneToOneConversation(
@@ -96,6 +97,14 @@ public class ConversationController {
             @RequestHeader String conversationId){
         List<GetGroupMemberResponse> response = conversationService.getMemberList(principal, conversationId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/video-call")
+    public ResponseEntity<VideoCallResponse> makeVideoCall(
+            Principal principal,
+            @Valid @RequestBody VideoCallRequest request) throws StreamException {
+        String callId = videoCallService.createCall(principal, request.getConversationId());
+        return ResponseEntity.status(HttpStatus.OK).body(VideoCallResponse.builder().callId(callId).build());
     }
 
 

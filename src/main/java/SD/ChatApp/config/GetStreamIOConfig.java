@@ -6,12 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GetStreamIOConfig {
-    private final String STREAM_API_KEY = "";
-    private final String STREAM_API_SECRET = "";
+    private final String STREAM_API_KEY = "gq9z7eegc8mj";
+    private final String STREAM_API_SECRET = "xnhce9t957nhvbz9cqerdymx3qnayw3ft6wzwz5c5bn5vu3tru9skvfc92nczhws";
 
     @Bean
     public StreamSDKClient streamSDKClient(){
-        StreamSDKClient client = new StreamSDKClient(STREAM_API_KEY, STREAM_API_SECRET);
-        return client;
+        return new StreamSDKClient(STREAM_API_KEY, STREAM_API_SECRET);
     }
 }

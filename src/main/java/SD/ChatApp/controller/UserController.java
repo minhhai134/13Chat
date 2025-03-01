@@ -4,12 +4,16 @@ import SD.ChatApp.dto.block.BlockRequest;
 import SD.ChatApp.dto.block.BlockResponse;
 import SD.ChatApp.dto.block.UnblockRequest;
 import SD.ChatApp.dto.block.UnblockResponse;
+import SD.ChatApp.dto.conversation.common.StreamTokenResponse;
 import SD.ChatApp.dto.friend.*;
 import SD.ChatApp.dto.user.*;
 import SD.ChatApp.model.User;
+import SD.ChatApp.repository.UserRepository;
 import SD.ChatApp.service.network.FriendRequestService;
 import SD.ChatApp.service.network.FriendService;
 import SD.ChatApp.service.UserService;
+import SD.ChatApp.service.videocall.VideoCallService;
+import io.getstream.exceptions.StreamException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,11 @@ public class UserController {
     private UserService userService;
     @Autowired
     private FriendService friendService;
+    @Autowired
+    private VideoCallService videoCallService;
+    @Autowired
+    private UserRepository userRepository;
+
 
 
     @GetMapping("/principal")
@@ -44,6 +53,13 @@ public class UserController {
 
     //****************************************************************************************
 
+    @GetMapping("/stream-token")
+    public ResponseEntity<StreamTokenResponse> getStreamToken(Principal principal) throws StreamException {
+        videoCallService.updateUser(principal);
+        String streamToken = videoCallService.generateStreamUserToken(principal);
+        StreamTokenResponse response = StreamTokenResponse.builder().streamUserToken(streamToken).build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @GetMapping("/info/{searchName}")
     public ResponseEntity<GetUserInfoResponse> getUserInfo(
