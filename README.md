@@ -19,4 +19,4 @@ group messaging, file sharing, image and video calls.
 
 4. Video call
    The application also allows users to make video calls
-   ![](assets/video call.png)
+   ![](assets/video%20call.png)
