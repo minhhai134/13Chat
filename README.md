@@ -2,6 +2,7 @@
 
 A messaging application with friend connection features, private messaging, 
 group messaging, file sharing, image and video calls.
+The application's GUI was primarily built by my associate, while I added features such as notifications and video calls: https://github.com/minhhai134/ChatApp-Frontend.git
 
 ## Project overview
 
